@@ -1,0 +1,8 @@
+
+<use name=EventFilter/GctRawToDigi>
+
+<bin name=unpacker file=gctVmeUnpacker.cpp>
+</bin>
+
+<bin name=mytest1 file=gctVmeUnpacker.cpp>
+</bin>

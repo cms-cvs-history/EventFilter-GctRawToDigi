@@ -31,8 +31,9 @@ int main(int argc, char* argv[]) {
   // open file
   ifstream inFile(filename);
 
-
   if (inFile.is_open()) {
+
+    cout << "Reading events from " << filename << endl;
 
     unsigned char rawEvt[MAXSIZE];
     unsigned int evtSize;
@@ -41,9 +42,11 @@ int main(int argc, char* argv[]) {
     while ( ! inFile.eof() ) {
 
       // read an event
-      readEvent(inFile, rawEvt, evtSize);
-      //      GctEvent evt(rawEvt, evtSize);
-      //      events.push_back(evt);
+      readEvent(inFile, &rawEvt[0], evtSize);
+
+      cout << "Event size is " << evtSize << endl;
+      GctEvent evt(&rawEvt[0], evtSize);
+      events.push_back(evt);
 
     }
 
@@ -73,10 +76,11 @@ void readEvent(ifstream& file, unsigned char * data, unsigned int& evtSize) {
 
   int i=0;
 
+  cout << "reading event" << endl;
+  getline(file, line);
+
   for (i=0; (line != "") && (i < MAXSIZE) ; i++) {
 
-    getline(file, line);
-    cout << "Line " << i<< " : " << line << endl;
     // NB file is 32-bit words, data is char !!!
 
     std::istringstream iss(line);
@@ -91,7 +95,14 @@ void readEvent(ifstream& file, unsigned char * data, unsigned int& evtSize) {
       cerr << "Invalid line entry!" << line <<  endl;
       exit(1); 
     }
-    
+
+    cout << "Line " << i<< " : " << std::hex << d << endl;
+    //    cout << "Stored " << std::hex << data[4*i] << "." << data[4*i+1] << "." << data[4*i+2] << "." << data[4*i+3] << endl;
+    //    unsigned tmp = data[4*i] + (data[4*i+1]<<8) + (data[4*i+2]<<16) + (data[4*i+3]<<24);
+    //    cout << "Remade " << std::hex << tmp << endl;
+
+    getline(file, line);
+
   }
 
   if (line != "") {
@@ -99,13 +110,5 @@ void readEvent(ifstream& file, unsigned char * data, unsigned int& evtSize) {
   }
 
   evtSize = 4*i;
-
-  // test data array
-  for (int j=0; j<4*i; j++) {
-      cout << data[4*j] << endl;
-      cout << data[4*j+1] << endl;
-      cout << data[4*j+2] << endl;
-      cout << data[4*j+3] << endl;
-  }
 
 }

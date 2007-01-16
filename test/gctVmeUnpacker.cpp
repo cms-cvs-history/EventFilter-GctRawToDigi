@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "EventFilter/GctRawToDigi/src/GctEvent.h"
+#include "EventFilter/GctRawToDigi/src/GctDaqRecord.h"
 
 
 // maximum event size in 32-bit words
@@ -23,7 +23,7 @@ void readEvent(ifstream& file, unsigned char * data, unsigned int& evtSize);
 int main(int argc, char* argv[]) {
 
   char* filename;
-  vector<GctEvent> events;
+  vector<GctDaqRecord> events;
 
   if (argc>0) { filename=argv[1]; }
   else { filename="test.dat"; }
@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
       readEvent(inFile, &rawEvt[0], evtSize);
 
       cout << "Event size is " << evtSize << endl;
-      GctEvent evt(&rawEvt[0], evtSize);
+      GctDaqRecord evt(&rawEvt[0], evtSize);
       events.push_back(evt);
 
     }
@@ -58,7 +58,7 @@ int main(int argc, char* argv[]) {
   }
 
   // now do something with the events
-  vector<GctEvent>::const_iterator e;
+  vector<GctDaqRecord>::const_iterator e;
   for (e=events.begin(); e!=events.end(); e++) {
     cout << (*e);
   }

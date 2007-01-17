@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
 
   return 0;
 
-};
+}
 
 
 void readEvent(ifstream& file, unsigned char * data, unsigned int& evtSize) {

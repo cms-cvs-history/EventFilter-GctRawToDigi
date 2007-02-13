@@ -1,5 +1,0 @@
-<Flags CXXFLAGS="-g">
-<use name=EventFilter/GctRawToDigi>
-
-<bin name=unpacker file=gctVmeUnpacker.cpp>
-</bin>

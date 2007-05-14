@@ -1,0 +1,5 @@
+
+module gctHwDigis = GctRawToDigi {
+  int32 GctFedId = 745
+  bool Verbose = false
+}

@@ -1,0 +1,5 @@
+
+module l1GctHwDigis = GctRawToDigi {
+  int32 GctFedId = 745
+  untracked bool Verbose = false
+}

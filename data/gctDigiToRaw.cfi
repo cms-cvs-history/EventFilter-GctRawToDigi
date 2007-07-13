@@ -1,0 +1,7 @@
+
+module gctDigiToRaw = GctDigiToRaw {
+    InputTag rctInputLabel = l1RctEmulDigis
+    InputTag gctInputLabel = l1GctEmulDigis
+    untracked bool verbose = false
+    int32 gctFedId = 745
+}

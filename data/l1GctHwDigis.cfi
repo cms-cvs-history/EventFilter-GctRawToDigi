@@ -1,5 +1,8 @@
 
 module l1GctHwDigis = GctRawToDigi {
-  int32 GctFedId = 745
-  untracked bool Verbose = false
+  InputTag inputLabel = gctDigiToRaw
+  int32 gctFedId = 745
+  untracked bool verbose = false
+  untracked bool unpackInternEm = true
+  untracked bool unpackFibres = true
 }

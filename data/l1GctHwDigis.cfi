@@ -3,6 +3,9 @@ module l1GctHwDigis = GctRawToDigi {
   InputTag inputLabel = gctDigiToRaw
   int32 gctFedId = 745
   untracked bool verbose = false
-  untracked bool unpackInternEm = true
-  untracked bool unpackFibres = true
+  untracked bool unpackEm = true
+  untracked bool unpackJets = false
+  untracked bool unpackEtSums = false
+  untracked bool unpackInternEm = false
+  untracked bool unpackFibres = false
 }

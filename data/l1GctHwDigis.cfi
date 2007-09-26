@@ -1,6 +1,6 @@
 
 module l1GctHwDigis = GctRawToDigi {
-  InputTag inputLabel = gctDigiToRaw
+  InputTag inputLabel = source
   int32 gctFedId = 745
   untracked bool verbose = false
   untracked bool unpackEm = true

@@ -5,7 +5,7 @@ module l1GctHwDigis = GctRawToDigi {
   untracked bool verbose = false
   untracked bool unpackEm = true
   untracked bool unpackJets = true
-  untracked bool unpackEtSums = false
+  untracked bool unpackEtSums = true
   untracked bool unpackInternEm = false
   untracked bool unpackFibres = false
 }

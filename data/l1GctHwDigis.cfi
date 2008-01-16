@@ -7,5 +7,6 @@ module l1GctHwDigis = GctRawToDigi {
   untracked bool unpackJets = true
   untracked bool unpackEtSums = true
   untracked bool unpackInternEm = false
+  untracked bool unpackRct = true
   untracked bool unpackFibres = false
 }

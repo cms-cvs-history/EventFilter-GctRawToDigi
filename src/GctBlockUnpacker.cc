@@ -6,6 +6,7 @@
 
 #include "DataFormats/L1GlobalCaloTrigger/interface/L1GctInternEmCand.h"
 #include "DataFormats/L1GlobalCaloTrigger/interface/L1GctEmCand.h"
+#include "DataFormats/L1CaloTrigger/interface/L1CaloRegionDetId.h"
 
 #include <iostream>
 #include <cassert>
@@ -22,11 +23,16 @@ GctBlockUnpacker::BlockIdToEmCandIsoBoundMap GctBlockUnpacker::InternEmIsoBounds
 GctBlockUnpacker::GctBlockUnpacker() :
   srcCardRouting_(),
   rctEm_(0),
+  rctCalo_(0),
   gctIsoEm_(0),
   gctNonIsoEm_(0),
   gctInternEm_(0),
   gctFibres_(0),
-  gctJets_(NUM_JET_CATAGORIES)
+  gctJets_(NUM_JET_CATAGORIES),
+  gctJetCounts_(0),
+  gctEtTotal_(0),
+  gctEtHad_(0),
+  gctEtMiss_(0)
 {
   static bool initClass = true;
   
@@ -62,6 +68,7 @@ GctBlockUnpacker::GctBlockUnpacker() :
     blockUnpackFn_[0xc8] = &GctBlockUnpacker::blockToGctInternEmCand;
     blockUnpackFn_[0xc9] = &GctBlockUnpacker::blockToFibresAndToRctEmCand;
     blockUnpackFn_[0xcb] = &GctBlockUnpacker::blockToGctInternEmCand;
+    blockUnpackFn_[0xff] = &GctBlockUnpacker::blockToRctCaloRegions;
     
     // Setup Block ID map for pipeline payload positions of isolated Internal EM Cands.
     InternEmIsoBounds_[0x69] = IsoBoundaryPair(8,15);
@@ -312,7 +319,7 @@ void GctBlockUnpacker::blockToGctJetCounts(const unsigned char * d, const GctBlo
   
   /* 
    * Note that we are only unpacking one timesample of these, because the dataformat for
-   * jet counts does not have timesample support (and nor is it ever likely to). 
+   * jet counts does not have timesample support. 
    */
   
   // Re-interpret block payload pointer to 32 bits so it sees six jet counts at a time.
@@ -330,7 +337,7 @@ void GctBlockUnpacker::blockToGctEnergySums(const unsigned char * d, const GctBl
   
   /* 
    * Note that we are only unpacking one timesample of these, because the relevant dataformats
-   * do not have timesample support (and nor are they ever likely to). 
+   * do not have timesample support. 
    */
   
   // Re-interpret block payload pointer to both 16 and 32 bits.
@@ -343,4 +350,49 @@ void GctBlockUnpacker::blockToGctEnergySums(const unsigned char * d, const GctBl
   // The call to hdr.nSamples() in the below line gives the offset from the start of the block
   // payload for a 32-bit pointer to get to the missing Et data in timesample 0.
   *gctEtMiss_ = L1GctEtMiss(p32[hdr.nSamples()]);    
+}
+
+void GctBlockUnpacker::blockToRctCaloRegions(const unsigned char * d, const GctBlockHeader& hdr)
+{
+  LogDebug("GCT") << "Unpacking RCT Calorimeter Regions" << std::endl;
+  
+  const unsigned int nSamples = hdr.nSamples();  // Number of time-samples.
+
+  // Re-interpret block payload pointer to 16 bits
+  const uint16_t * p16 = reinterpret_cast<const uint16_t *>(d);
+  
+  for(unsigned iCrate = 0 ; iCrate < 18 ; ++iCrate)
+  {
+    // Barrel and endcap regions
+    for(unsigned iCard = 0 ; iCard < 7 ; ++iCard)
+    {
+      // Samples
+      for(unsigned iSample = 0 ; iSample < nSamples ; ++iSample)
+      {
+        // Two regions per card (and per 32-bit word).
+        for(unsigned iRegion = 0 ; iRegion < 2 ; ++iRegion)
+        {
+          L1CaloRegionDetId id(iCrate, iCard, iRegion);
+          rctCalo_->push_back(L1CaloRegion(*p16, id.ieta(), id.iphi(), iSample));
+          ++p16; //advance pointer
+        }
+      }
+    }
+    // Forward regions (8 regions numbered 0 through 7, packed in 4 sets of pairs)
+    for(unsigned iRegionPairNum = 0 ; iRegionPairNum < 4 ; ++iRegionPairNum)
+    {
+      // Samples
+      for(unsigned iSample = 0 ; iSample < nSamples ; ++iSample)
+      {
+        // two regions in a pair
+        for(unsigned iPair = 0 ; iPair < 2 ; ++iPair)
+        {
+          // For forward regions, RCTCard=999
+          L1CaloRegionDetId id(iCrate, 999, iRegionPairNum*2 + iPair);
+          rctCalo_->push_back(L1CaloRegion(*p16, id.ieta(), id.iphi(), iSample));
+          ++p16; //advance pointer
+        }
+      }
+    }
+  }
 }

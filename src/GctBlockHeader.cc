@@ -49,6 +49,7 @@ pair<unsigned, unsigned> a[] = {
   pair<unsigned, unsigned>(0xc8,16),
   pair<unsigned, unsigned>(0xc9,12),
   pair<unsigned, unsigned>(0xcb,4),
+  pair<unsigned, unsigned>(0xff,198)
 };
 
 map<unsigned, unsigned> GctBlockHeader::blockLength_(a, a + sizeof(a) / sizeof(a[0]));
@@ -77,6 +78,7 @@ pair<unsigned, string> b[] = {
   pair<unsigned, string>(0xc8,"Leaf-U2, Elec, PosEta, Sort Input"),
   pair<unsigned, string>(0xc9,"Leaf-U2, Elec, PosEta, Raw Input"),
   pair<unsigned, string>(0xcb,"Leaf-U2, Elec, PosEta, Sort Output"),
+  pair<unsigned, string>(0xff,"All RCT Calo Regions")
 };
 
 map<unsigned, string> GctBlockHeader::blockName_(b, b + sizeof(b) / sizeof(b[0]));

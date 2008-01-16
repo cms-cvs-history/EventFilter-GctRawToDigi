@@ -95,8 +95,9 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   blockPacker_.setBcId(bx);
   blockPacker_.setEvId(eventNumber);
  
-  // The gct input label string
+  // The GCT and RCT input label strings
   const std::string gctInputLabelStr = gctInputLabel_.label();
+  const std::string rctInputLabelStr = rctInputLabel_.label();
   
   // get GCT digis
   edm::Handle<L1GctEmCandCollection> isoEm;
@@ -120,9 +121,9 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   // get RCT EM Cand digi
   bool packRctEmThisEvent = packRctEm_;
+  edm::Handle<L1CaloEmCollection> rctEm;
   if(packRctEmThisEvent)
   {
-    edm::Handle<L1CaloEmCollection> rctEm;
     iEvent.getByLabel(rctInputLabelStr, rctEm);
     if(rctEm.failedToGet())
     {
@@ -133,9 +134,10 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   // get RCT Calo region digi
   bool packRctCaloThisEvent = packRctCalo_;
+  edm::Handle<L1CaloRegionCollection> rctCalo;
   if(packRctCaloThisEvent)
   {
-    edm::Handle<L1CaloRegionCollection> rctCalo;
+
     iEvent.getByLabel(rctInputLabelStr, rctCalo);
     if(rctCalo.failedToGet())
     {
@@ -153,7 +155,7 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
  
   // set the size & make pointers to the header, beginning of payload, and footer.
   // RawSize MUST BE MULTIPLE OF 8! (slink packets are 64 bit, but using 8-bit data struct).
-  const unsigned int rawSize = 88;  // Minimum size for GCT output data
+  unsigned int rawSize = 88;  // Minimum size for GCT output data
   if(packRctEmThisEvent) { rawSize += 232; }  // Space for RCT EM Cands.
   if(packRctCaloThisEvent) { /* placeholder */ }  // Space for RCT Calo Regions.
   fedRawData.resize(rawSize);

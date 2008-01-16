@@ -10,10 +10,23 @@
 using std::vector;
 
 
-GctBlockPacker::GctBlockPacker() {
-
+GctBlockPacker::GctBlockPacker():
+  bcid_(0),
+  evid_(0),
+  srcCardRouting_()
+{
+  static bool initClass = true;
+  
+  if(initClass)
+  {
+    initClass = false;
+    
+    rctCrate_[0x81] = 13;
+    rctCrate_[0x89] = 9;
+    rctCrate_[0xC1] = 4;
+    rctCrate_[0xC9] = 0; 
+  }  
 }
-
 
 GctBlockPacker::~GctBlockPacker() {
 
@@ -136,4 +149,76 @@ void GctBlockPacker::writeGctEnergySumsBlock(unsigned char * d, const L1GctEtTot
   p16[0] = etTotal->raw();  // Et Total on bits 15:0 of block payload.
   p16[1] = etHad->raw();  // Et Hadronic on bits 31:16 of block payload.
   p32[1] = etMiss->raw();  // Et Miss on bits 63:32 of block payload.
+}
+
+
+void GctBlockPacker::writeRctEmCandBlocks(unsigned char * d, const L1CaloEmCollection * rctEm)
+{
+  // This method is one giant "temporary" hack for CMSSW_1_8_X.
+
+  // Need 18 sets of EM fibre data, since 18 RCT crates  
+  EmuToSfpData emuToSfpData[18];
+
+  // Fill in the input arrays with the data from the digi  
+  for(unsigned i=0, size=rctEm->size(); i < size ; ++i)
+  {
+    L1CaloEmCand &cand = rctEm->at(i);
+    unsigned crateNum = cand.rctCrate();
+    unsinged index = cand.index();
+    
+    if(cand.isolated())
+    {
+      emuToSfpData[crateNum].eIsoRank[index] = cand.rank();
+      emuToSfpData[crateNum].eIsoCardId[index] = cand.rctCard();
+      emuToSfpData[crateNum].eIsoRegionId[index] = cand.rctRegion();
+    }
+    else
+    {
+      emuToSfpData[crateNum].eNonIsoRank[index] = cand.rank();
+      emuToSfpData[crateNum].eNonIsoCardId[index] = cand.rctCard();
+      emuToSfpData[crateNum].eNonIsoRegionId[index] = cand.rctRegion();
+    }
+    // Note doing nothing with the MIP bit and Q bit arrays as we are not
+    // interested in them; these arrays will contain uninitialised junk
+    // and so you will get out junk for sourcecard output 0 - I.e. don't
+    // trust sfp[0][0] or sfp[1][0] output!. 
+  }
+
+  // Now run the conversion
+  for(unsigned c = 0 ; c < 18 ; ++c)
+  {
+    srcCardRouting_.EMUtoSFP(emuToSfpData[c].eIsoRank, emuToSfpData[c].eIsoCardId, emuToSfpData[c].eIsoRegionId,
+                             emuToSfpData[c].eNonIsoRank, emuToSfpData[c].eNonIsoCardId, emuToSfpData[c].eNonIsoRegionId
+                             emuToSfpData[c].mipBits, emuToSfpData[c].qBits, emuToSfpData[c].sfp);
+  }
+  
+  // Now pack up the data into the RAW format.
+  RctCrateMap::iterator blockStartCrateIter;
+  for(blockStartCrateIter = rctCrate_.begin() ; blockStartCrateIter != rctCrate_.end() ; ++blockStartCrateIter)
+  {
+    unsigned blockId = blockStartCrateIter->first;
+    unsigned startCrate = blockStartCrateIter->second;
+    unsigned blockLength_32bit = GctBlockHeader::lookupBlockLength(blockId);
+    
+    writeGctHeader(d, blockId, 1);
+    d+=4; // move past header.
+    
+    // Want a 16 bit pointer to push the 16 bit data in.
+    const uint16_t * p16 = reinterpret_cast<const uint16_t *>(d);
+    
+    for(unsigned iCrate=startCrate, end=startCrate + blockLength_32bit/3 ; iCrate < end ; ++iCrate)
+    {
+      for(unsigned iOutput = 1 ; iOutput < 4 ; ++iOutput)  // skipping output 0 as that is Q-bit/MIP-bit data.
+      {
+        for(unsigned iCycle = 0 ; iCycle < 2 ; ++iCycle)
+        {
+          *p16 = emuToSfpData[iCrate].sfp[iCycle][iOutput];
+          ++p16;
+        }
+      } 
+    }
+    
+    // Now move d onto the location of the next block header
+    d+=(blockLength_32bit*4);
+  }
 }

@@ -81,3 +81,12 @@ pair<unsigned, string> b[] = {
 
 map<unsigned, string> GctBlockHeader::blockName_(b, b + sizeof(b) / sizeof(b[0]));
 
+unsigned int GctBlockHeader::lookupBlockLength(unsigned int blockId)
+{
+  map<unsigned, unsigned>::iterator result = blockLength_.find(blockId);
+  if(result != blockLength_.end())
+  {
+    return result->second;
+  }
+  else { return 0; }
+}

@@ -1,6 +1,3 @@
-// TEST COMMIT (Using a branch for the first time)
-// THESE TWO LINES OF COMMENT ARE THE ONLY MODIFICATION.
-
 #include "EventFilter/GctRawToDigi/plugins/GctDigiToRaw.h"
 
 // system
@@ -55,6 +52,8 @@ using std::vector;
 GctDigiToRaw::GctDigiToRaw(const edm::ParameterSet& iConfig) :
   rctInputLabel_(iConfig.getParameter<edm::InputTag>("rctInputLabel")),
   gctInputLabel_(iConfig.getParameter<edm::InputTag>("gctInputLabel")),
+  packRctEm_(iConfig.getUntrackedParameter<bool>("packRctEm", true)),
+  packRctCalo_(iConfig.getUntrackedParameter<bool>("packRctCalo", true)),
   fedId_(iConfig.getParameter<int>("gctFedId")),
   verbose_(iConfig.getUntrackedParameter<bool>("verbose",false)),
   counter_(0),
@@ -99,7 +98,7 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   // The gct input label string
   const std::string gctInputLabelStr = gctInputLabel_.label();
   
-  // get digis
+  // get GCT digis
   edm::Handle<L1GctEmCandCollection> isoEm;
   iEvent.getByLabel(gctInputLabelStr, "isoEm", isoEm);
   edm::Handle<L1GctEmCandCollection> nonIsoEm;
@@ -118,7 +117,34 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   iEvent.getByLabel(gctInputLabelStr, "", etHad);
   edm::Handle<L1GctEtMiss> etMiss;
   iEvent.getByLabel(gctInputLabelStr, "", etMiss);
-  
+
+  // get RCT EM Cand digi
+  bool packRctEmThisEvent = packRctEm_;
+  if(packRctEmThisEvent)
+  {
+    edm::Handle<L1CaloEmCollection> rctEm;
+    iEvent.getByLabel(rctInputLabelStr, rctEm);
+    if(rctEm.failedToGet())
+    {
+      packRctEmThisEvent = false;
+      edm::LogWarning("GCT") << "RCT EM Candidate packing requested, but failed to get them from event!" << endl;
+    }
+  }
+
+  // get RCT Calo region digi
+  bool packRctCaloThisEvent = packRctCalo_;
+  if(packRctCaloThisEvent)
+  {
+    edm::Handle<L1CaloRegionCollection> rctCalo;
+    iEvent.getByLabel(rctInputLabelStr, rctCalo);
+    if(rctCalo.failedToGet())
+    {
+      packRctCaloThisEvent = false;
+      edm::LogWarning("GCT") << "RCT Calo Region packing requested, but failed to get them from event!" << endl;
+    }
+  }
+
+
   // create the raw data collection
   std::auto_ptr<FEDRawDataCollection> rawColl(new FEDRawDataCollection()); 
  
@@ -126,7 +152,10 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   FEDRawData& fedRawData=rawColl->FEDData(fedId_);
  
   // set the size & make pointers to the header, beginning of payload, and footer.
-  const unsigned int rawSize = 88;  // MUST BE MULTIPLE OF 8! (slink packets are 64 bit, but using 8-bit data struct).
+  // RawSize MUST BE MULTIPLE OF 8! (slink packets are 64 bit, but using 8-bit data struct).
+  const unsigned int rawSize = 88;  // Minimum size for GCT output data
+  if(packRctEmThisEvent) { rawSize += 232; }  // Space for RCT EM Cands.
+  if(packRctCaloThisEvent) { /* placeholder */ }  // Space for RCT Calo Regions.
   fedRawData.resize(rawSize);
   unsigned char * pHeader = fedRawData.data();  
   unsigned char * pPayload = pHeader + 8;
@@ -147,6 +176,12 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   
   // Pack GCT Energy Sum digis; payload offset of 60 needed to get to the Energy Sums block header.
   blockPacker_.writeGctEnergySumsBlock(pPayload + 60, etTotal.product(), etHad.product(), etMiss.product());
+ 
+  // Pack RCT EM Cands
+  if(packRctEmThisEvent) { blockPacker_.writeRctEmCandBlocks(pPayload + 80, rctEm.product()); }
+
+  // Pack RCT Calo Regions
+  if(packRctCaloThisEvent) {  /* placeholder */ }
  
   // Write CDF footer (exactly as told by Marco Zanetti)
   FEDTrailer fedTrailer(pFooter);

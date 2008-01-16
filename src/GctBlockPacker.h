@@ -87,7 +87,7 @@ class GctBlockPacker
     unsigned short qBits[7][2];
     // Output data.
     unsigned short sfp[2][4]; // [ cycle ] [ output number ]
-  }
+  };
 
   
 };

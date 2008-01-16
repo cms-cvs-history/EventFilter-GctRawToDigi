@@ -1,13 +1,16 @@
 #include "EventFilter/GctRawToDigi/src/GctBlockPacker.h"
 
 // C++ headers
-#include <vector>
+#include <cassert>
 
 // CMSSW headers
 #include "EventFilter/GctRawToDigi/src/GctBlockHeader.h"
 
 // Namespace resolution
 using std::vector;
+
+// INITIALISE STATICS
+GctBlockPacker::RctCrateMap GctBlockPacker::rctCrate_ = GctBlockPacker::RctCrateMap();
 
 
 GctBlockPacker::GctBlockPacker():
@@ -162,9 +165,13 @@ void GctBlockPacker::writeRctEmCandBlocks(unsigned char * d, const L1CaloEmColle
   // Fill in the input arrays with the data from the digi  
   for(unsigned i=0, size=rctEm->size(); i < size ; ++i)
   {
-    L1CaloEmCand &cand = rctEm->at(i);
+    const L1CaloEmCand &cand = rctEm->at(i);
     unsigned crateNum = cand.rctCrate();
-    unsinged index = cand.index();
+    unsigned index = cand.index();
+    
+    // Some error checking.
+    assert(crateNum < 18); // Only 18 RCT crates!
+    assert(index < 4); // Should only be 4 cands of each type per crate!
     
     if(cand.isolated())
     {
@@ -188,7 +195,7 @@ void GctBlockPacker::writeRctEmCandBlocks(unsigned char * d, const L1CaloEmColle
   for(unsigned c = 0 ; c < 18 ; ++c)
   {
     srcCardRouting_.EMUtoSFP(emuToSfpData[c].eIsoRank, emuToSfpData[c].eIsoCardId, emuToSfpData[c].eIsoRegionId,
-                             emuToSfpData[c].eNonIsoRank, emuToSfpData[c].eNonIsoCardId, emuToSfpData[c].eNonIsoRegionId
+                             emuToSfpData[c].eNonIsoRank, emuToSfpData[c].eNonIsoCardId, emuToSfpData[c].eNonIsoRegionId,
                              emuToSfpData[c].mipBits, emuToSfpData[c].qBits, emuToSfpData[c].sfp);
   }
   
@@ -204,7 +211,7 @@ void GctBlockPacker::writeRctEmCandBlocks(unsigned char * d, const L1CaloEmColle
     d+=4; // move past header.
     
     // Want a 16 bit pointer to push the 16 bit data in.
-    const uint16_t * p16 = reinterpret_cast<const uint16_t *>(d);
+    uint16_t * p16 = reinterpret_cast<uint16_t *>(const_cast<unsigned char *>(d));
     
     for(unsigned iCrate=startCrate, end=startCrate + blockLength_32bit/3 ; iCrate < end ; ++iCrate)
     {

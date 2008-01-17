@@ -157,7 +157,7 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   // RawSize MUST BE MULTIPLE OF 8! (slink packets are 64 bit, but using 8-bit data struct).
   unsigned int rawSize = 88;  // Minimum size for GCT output data
   if(packRctEmThisEvent) { rawSize += 232; }  // Space for RCT EM Cands.
-  if(packRctCaloThisEvent) { rawSize += 796; }  // Space for RCT Calo Regions.
+  if(packRctCaloThisEvent) { rawSize += 800; }  // Space for RCT Calo Regions (plus a 32-bit word of padding to make divisible by 8)
   fedRawData.resize(rawSize);
   unsigned char * pHeader = fedRawData.data();  
   unsigned char * pPayload = pHeader + 8;
@@ -194,7 +194,6 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   if(packRctCaloThisEvent)
   {
     blockPacker_.writeRctCaloRegionBlock(pPayload, rctCalo.product());
-    // pPayload+=796;  //advance payload pointer
   }
  
   // Write CDF footer (exactly as told by Marco Zanetti)

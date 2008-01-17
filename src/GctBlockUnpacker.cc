@@ -358,7 +358,7 @@ void GctBlockUnpacker::blockToRctCaloRegions(const unsigned char * d, const GctB
   
   LogDebug("GCT") << "Unpacking RCT Calorimeter Regions" << std::endl;
   
-  const unsigned int nSamples = hdr.nSamples();  // Number of time-samples.
+  const int nSamples = hdr.nSamples();  // Number of time-samples.
 
   // Re-interpret block payload pointer to 16 bits
   const uint16_t * p16 = reinterpret_cast<const uint16_t *>(d);
@@ -369,7 +369,7 @@ void GctBlockUnpacker::blockToRctCaloRegions(const unsigned char * d, const GctB
     for(unsigned iCard = 0 ; iCard < 7 ; ++iCard)
     {
       // Samples
-      for(unsigned iSample = 0 ; iSample < nSamples ; ++iSample)
+      for(int16_t iSample = 0 ; iSample < nSamples ; ++iSample)
       {
         // Two regions per card (and per 32-bit word).
         for(unsigned iRegion = 0 ; iRegion < 2 ; ++iRegion)
@@ -384,7 +384,7 @@ void GctBlockUnpacker::blockToRctCaloRegions(const unsigned char * d, const GctB
     for(unsigned iRegionPairNum = 0 ; iRegionPairNum < 4 ; ++iRegionPairNum)
     {
       // Samples
-      for(unsigned iSample = 0 ; iSample < nSamples ; ++iSample)
+      for(int16_t iSample = 0 ; iSample < nSamples ; ++iSample)
       {
         // two regions in a pair
         for(unsigned iPair = 0 ; iPair < 2 ; ++iPair)

@@ -158,7 +158,7 @@ void GctBlockPacker::writeRctEmCandBlocks(unsigned char * d, const L1CaloEmColle
 {
   // This method is one giant "temporary" hack for CMSSW_1_8_X.
 
-  assert(rctEm->size() >= 144)  // Should be 18 crates * 2 types (iso/noniso) * 4 electrons = 144 for 1 bx.
+  assert(rctEm->size() >= 144);  // Should be 18 crates * 2 types (iso/noniso) * 4 electrons = 144 for 1 bx.
 
   // Need 18 sets of EM fibre data, since 18 RCT crates  
   EmuToSfpData emuToSfpData[18];
@@ -242,7 +242,7 @@ void GctBlockPacker::writeRctCaloRegionBlock(unsigned char * d, const L1CaloRegi
   // Want a 16 bit pointer to push the 16 bit data in.
   uint16_t * p16 = reinterpret_cast<uint16_t *>(const_cast<unsigned char *>(d));
  
-  assert(rctCalo->size() >= 396)  // Should be at least 396 calo regions for 1 bx.
+  assert(rctCalo->size() >= 396);  // Should be at least 396 calo regions for 1 bx.
   
   for(unsigned i=0, size=rctCalo->size(); i < size ; ++i)
   {
@@ -254,7 +254,7 @@ void GctBlockPacker::writeRctCaloRegionBlock(unsigned char * d, const L1CaloRegi
     
     // Gotta make the raw data as there currently isn't a method of getting raw from L1CaloRegion
     const uint16_t raw =  reg.et()                        | 
-                         (reg.overflow()  ? 0x400  : 0x0) |
+                         (reg.overFlow()  ? 0x400  : 0x0) |
                          (reg.fineGrain() ? 0x800  : 0x0) |
                          (reg.mip()       ? 0x1000 : 0x0) |
                          (reg.quiet()     ? 0x2000 : 0x0);

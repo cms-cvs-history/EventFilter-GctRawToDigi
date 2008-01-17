@@ -54,6 +54,8 @@ class GctBlockPacker
   /// Writes the 4 RCT EM Candidate blocks.
   void writeRctEmCandBlocks(unsigned char * d, const L1CaloEmCollection * rctEm);
 
+  /// Writes the giant hack that is the RCT Calo Regions block.
+  void writeRctCaloRegionBlock(unsigned char * d, const L1CaloRegionCollection * rctCalo);
 
  private:
 

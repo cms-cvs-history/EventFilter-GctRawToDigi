@@ -154,10 +154,11 @@ void GctBlockPacker::writeGctEnergySumsBlock(unsigned char * d, const L1GctEtTot
   p32[1] = etMiss->raw();  // Et Miss on bits 63:32 of block payload.
 }
 
-
 void GctBlockPacker::writeRctEmCandBlocks(unsigned char * d, const L1CaloEmCollection * rctEm)
 {
   // This method is one giant "temporary" hack for CMSSW_1_8_X.
+
+  assert(rctEm->size() >= 144)  // Should be 18 crates * 2 types (iso/noniso) * 4 electrons = 144 for 1 bx.
 
   // Need 18 sets of EM fibre data, since 18 RCT crates  
   EmuToSfpData emuToSfpData[18];
@@ -166,6 +167,7 @@ void GctBlockPacker::writeRctEmCandBlocks(unsigned char * d, const L1CaloEmColle
   for(unsigned i=0, size=rctEm->size(); i < size ; ++i)
   {
     const L1CaloEmCand &cand = rctEm->at(i);
+    if(cand.bx() != 0) { continue; }  // Only interested in bunch crossing zero for now!
     unsigned crateNum = cand.rctCrate();
     unsigned index = cand.index();
     
@@ -227,5 +229,51 @@ void GctBlockPacker::writeRctEmCandBlocks(unsigned char * d, const L1CaloEmColle
     
     // Now move d onto the location of the next block header
     d+=(blockLength_32bit*4);
+  }
+}
+
+void GctBlockPacker::writeRctCaloRegionBlock(unsigned char * d, const L1CaloRegionCollection * rctCalo)
+{
+  // This method is one giant "temporary" hack for CMSSW_1_8_X.
+
+  writeGctHeader(d, 0xff, 1);
+  d+=4; // move past header.
+
+  // Want a 16 bit pointer to push the 16 bit data in.
+  uint16_t * p16 = reinterpret_cast<uint16_t *>(const_cast<unsigned char *>(d));
+ 
+  assert(rctCalo->size() >= 396)  // Should be at least 396 calo regions for 1 bx.
+  
+  for(unsigned i=0, size=rctCalo->size(); i < size ; ++i)
+  {
+    const L1CaloRegion &reg = rctCalo->at(i);
+    if(reg.bx() != 0) { continue; }  // Only interested in bunch crossing zero for now!
+    const unsigned crateNum = reg.rctCrate();
+    const unsigned regionIndex = reg.rctRegionIndex();
+    assert(crateNum < 18); // Only 18 RCT crates!
+    
+    // Gotta make the raw data as there currently isn't a method of getting raw from L1CaloRegion
+    const uint16_t raw =  reg.et()                        | 
+                         (reg.overflow()  ? 0x400  : 0x0) |
+                         (reg.fineGrain() ? 0x800  : 0x0) |
+                         (reg.mip()       ? 0x1000 : 0x0) |
+                         (reg.quiet()     ? 0x2000 : 0x0);
+ 
+    unsigned offset = 0;  // for storing calculated raw data offset.   
+    if(reg.isHbHe())  // Is a barrel/endcap region
+    {
+      const unsigned cardNum = reg.rctCard();
+      assert(cardNum < 7);  // 7 RCT cards per crate for the barrel/endcap
+      assert(regionIndex < 2); // regionIndex less than 2 for barrel/endcap
+      
+      // Calculate position in the raw data from crateNum, cardNum, and regionIndex
+      offset = crateNum*22 + cardNum*2 + regionIndex;
+    }
+    else  // Must be forward region
+    {
+      assert(regionIndex < 8); // regionIndex less than 8 for forward calorimeter.
+      offset = crateNum*22 + 14 + regionIndex;
+    }
+    p16[offset] = raw;  // Write raw data in correct place!
   }
 }

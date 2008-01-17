@@ -354,6 +354,8 @@ void GctBlockUnpacker::blockToGctEnergySums(const unsigned char * d, const GctBl
 
 void GctBlockUnpacker::blockToRctCaloRegions(const unsigned char * d, const GctBlockHeader& hdr)
 {
+  // This method is one giant "temporary" hack for CMSSW_1_8_X.
+  
   LogDebug("GCT") << "Unpacking RCT Calorimeter Regions" << std::endl;
   
   const unsigned int nSamples = hdr.nSamples();  // Number of time-samples.

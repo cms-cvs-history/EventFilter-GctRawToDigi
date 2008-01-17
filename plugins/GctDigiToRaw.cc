@@ -157,7 +157,7 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   // RawSize MUST BE MULTIPLE OF 8! (slink packets are 64 bit, but using 8-bit data struct).
   unsigned int rawSize = 88;  // Minimum size for GCT output data
   if(packRctEmThisEvent) { rawSize += 232; }  // Space for RCT EM Cands.
-  if(packRctCaloThisEvent) { /* placeholder */ }  // Space for RCT Calo Regions.
+  if(packRctCaloThisEvent) { rawSize += 796; }  // Space for RCT Calo Regions.
   fedRawData.resize(rawSize);
   unsigned char * pHeader = fedRawData.data();  
   unsigned char * pPayload = pHeader + 8;
@@ -169,21 +169,33 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
  
   // Pack GCT Jet Cand output digis
   blockPacker_.writeGctJetCandsBlock(pPayload, cenJets.product(), forJets.product(), tauJets.product());
+  pPayload+=28;  //advance payload pointer
   
-  // Pack GCT Jet Count digi; payload offset of 28 needed to get to the jet counts block header.
-  blockPacker_.writeGctJetCountsBlock(pPayload + 28, jetCounts.product());
+  // Pack GCT Jet Count digi
+  blockPacker_.writeGctJetCountsBlock(pPayload, jetCounts.product());
+  pPayload+=12;  //advance payload pointer
  
-  // Pack GCT EM Cand output digis; payload offset of 40 needed to get to the EM cands block header.
-  blockPacker_.writeGctEmBlock(pPayload + 40, isoEm.product(), nonIsoEm.product());
+  // Pack GCT EM Cand output digis
+  blockPacker_.writeGctEmBlock(pPayload0, isoEm.product(), nonIsoEm.product());
+  pPayload+=20;  //advance payload pointer
   
-  // Pack GCT Energy Sum digis; payload offset of 60 needed to get to the Energy Sums block header.
-  blockPacker_.writeGctEnergySumsBlock(pPayload + 60, etTotal.product(), etHad.product(), etMiss.product());
- 
+  // Pack GCT Energy Sum digis
+  blockPacker_.writeGctEnergySumsBlock(pPayload, etTotal.product(), etHad.product(), etMiss.product());
+  pPayload+=12;  //advance payload pointer
+  
   // Pack RCT EM Cands
-  if(packRctEmThisEvent) { blockPacker_.writeRctEmCandBlocks(pPayload + 80, rctEm.product()); }
+  if(packRctEmThisEvent)
+  {
+    blockPacker_.writeRctEmCandBlocks(pPayload, rctEm.product());
+    pPayload+=232;  //advance payload pointer
+  }
 
   // Pack RCT Calo Regions
-  if(packRctCaloThisEvent) {  /* placeholder */ }
+  if(packRctCaloThisEvent)
+  {
+    blockPacker_.writeRctCaloRegionBlock(pPayload, rctCalo.product());
+    // pPayload+=796;  //advance payload pointer
+  }
  
   // Write CDF footer (exactly as told by Marco Zanetti)
   FEDTrailer fedTrailer(pFooter);

@@ -176,7 +176,7 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   pPayload+=12;  //advance payload pointer
  
   // Pack GCT EM Cand output digis
-  blockPacker_.writeGctEmBlock(pPayload0, isoEm.product(), nonIsoEm.product());
+  blockPacker_.writeGctEmBlock(pPayload, isoEm.product(), nonIsoEm.product());
   pPayload+=20;  //advance payload pointer
   
   // Pack GCT Energy Sum digis

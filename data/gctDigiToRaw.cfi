@@ -2,6 +2,8 @@
 module gctDigiToRaw = GctDigiToRaw {
     InputTag rctInputLabel = rctDigis
     InputTag gctInputLabel = gctDigis
+    untracked bool packRctEm = true
+    untracked bool packRctCalo = true
     untracked bool verbose = false
     int32 gctFedId = 745
 }

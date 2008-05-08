@@ -1,7 +1,7 @@
 
 module gctDigiToRaw = GctDigiToRaw {
-    InputTag rctInputLabel = rctDigis
-    InputTag gctInputLabel = gctDigis
+    InputTag rctInputLabel = simRctDigis
+    InputTag gctInputLabel = simGctDigis
     untracked bool packRctEm = true
     untracked bool packRctCalo = true
     untracked bool verbose = false

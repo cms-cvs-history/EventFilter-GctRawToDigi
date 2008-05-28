@@ -1,0 +1,4 @@
+
+module gctFakeJets = GctFakeJetProducer {
+  InputTag inputTag = gctDigis
+}

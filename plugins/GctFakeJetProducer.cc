@@ -13,7 +13,7 @@
 //
 // Original Author:  Jim Brooke
 //         Created:  Tue May 27 15:35:44 CEST 2008
-// $Id$
+// $Id: GctFakeJetProducer.cc,v 1.1.2.1 2008/05/28 15:21:12 jbrooke Exp $
 //
 //
 
@@ -128,8 +128,10 @@ GctFakeJetProducer::produce(edm::Event& e, const edm::EventSetup& es)
    std::auto_ptr<L1GctEmCandCollection>  gctNonIsoEm   ( new L1GctEmCandCollection() );
    gctNonIsoEm->reserve(4);
    for (unsigned i=0; i<4; i++) {
-     gctIsoEm->push_back(isoEm->at(i));
-     gctNonIsoEm->push_back(nonIsoEm->at(i));
+     if (i < isoEm->size()) gctIsoEm->push_back(isoEm->at(i));
+     else gctIsoEm->push_back(L1GctEmCand(0,0,0,true));
+     if (i < nonIsoEm->size()) gctNonIsoEm->push_back(nonIsoEm->at(i));
+     else gctNonIsoEm->push_back(L1GctEmCand(0,0,0,false));
    }
 
    // create jets from electrons
@@ -142,10 +144,16 @@ GctFakeJetProducer::produce(edm::Event& e, const edm::EventSetup& es)
 
    L1GctEmCand em;
    for (unsigned i=0; i<4; i++) {
-     em = nonIsoEm->at(i);
-     gctCenJets->push_back(L1GctJetCand(em.rank(), em.phiIndex(), em.etaIndex(), false, false, 0, 0, 0));
-     em = isoEm->at(i);
-     gctTauJets->push_back(L1GctJetCand(em.rank(), em.phiIndex(), em.etaIndex(), true, false, 0, 0, 0));
+     if (i < nonIsoEm->size()) {
+       em = nonIsoEm->at(i);
+       gctCenJets->push_back(L1GctJetCand(em.rank(), em.phiIndex(), em.etaIndex(), false, false, 0, 0, 0));
+     }
+     else gctCenJets->push_back(L1GctJetCand(0, 0, 0, false, false, 0, 0, 0));
+     if (i < isoEm->size()) {
+       em = isoEm->at(i);
+       gctTauJets->push_back(L1GctJetCand(em.rank(), em.phiIndex(), em.etaIndex(), true, false, 0, 0, 0));
+     }
+     else gctTauJets->push_back(L1GctJetCand(0, 0, 0, true, false, 0, 0, 0));
      gctForJets->push_back(L1GctJetCand(0, 0, 0, false, true, 0, 0, 0));
    }
 

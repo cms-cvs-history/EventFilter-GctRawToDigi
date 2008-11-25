@@ -1,9 +1,0 @@
-
-module gctDigiToRaw = GctDigiToRaw {
-    InputTag rctInputLabel = simRctDigis
-    InputTag gctInputLabel = simGctDigis
-    untracked bool packRctEm = true
-    untracked bool packRctCalo = true
-    untracked bool verbose = false
-    int32 gctFedId = 745
-}

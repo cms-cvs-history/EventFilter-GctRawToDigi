@@ -18,7 +18,7 @@
 #include "DataFormats/Provenance/interface/EventID.h"
 
 // Header needed to computer CRCs
-#include "EventFilter/Utilities/interface/Crc.h"
+#include "FWCore/Utilities/interface/CRC16.h"
 
 // GCT input data formats
 #include "DataFormats/L1CaloTrigger/interface/L1CaloEmCand.h"

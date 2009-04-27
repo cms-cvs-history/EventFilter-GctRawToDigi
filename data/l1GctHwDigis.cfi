@@ -2,13 +2,8 @@
 module l1GctHwDigis = GctRawToDigi {
   InputTag inputLabel = source
   int32 gctFedId = 745
-  untracked bool verbose = false
   bool hltMode = false
-  bool grenCompatibilityMode = false
-  untracked bool unpackEm = true
-  untracked bool unpackJets = true
-  untracked bool unpackEtSums = true
-  untracked bool unpackInternEm = false
-  untracked bool unpackRct = true
-  untracked bool unpackFibres = false
+  bool unpackSharedRegions = false
+  uint32 unpackerVersion = 0
+  untracked bool verbose = false
 }

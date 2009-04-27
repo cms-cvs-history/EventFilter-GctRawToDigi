@@ -81,7 +81,6 @@ GctRawToDigi::GctRawToDigi(const edm::ParameterSet& iConfig) :
   produces<L1GctInternJetDataCollection>();
   produces<L1GctInternEtSumCollection>();
   produces<L1GctInternHFDataCollection>();
-  produces<L1GctInternHtMissCollection>();
 
   // GCT output collections
   produces<L1GctEmCandCollection>("isoEm");
@@ -94,11 +93,7 @@ GctRawToDigi::GctRawToDigi(const edm::ParameterSet& iConfig) :
   produces<L1GctEtTotalCollection>();
   produces<L1GctEtHadCollection>();
   produces<L1GctEtMissCollection>();
-  produces<L1GctHtMissCollection>();
   produces<L1GctJetCountsCollection>();  // Deprecated (empty collection still needed by GT)
-  
-  // Error collection
-  produces<L1TriggerErrorCollection>();
 }
 
 

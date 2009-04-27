@@ -104,8 +104,6 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   iEvent.getByLabel(gctInputLabelStr, "", hfRingSums);
   edm::Handle<L1GctHFBitCountsCollection> hfBitCounts;
   iEvent.getByLabel(gctInputLabelStr, "", hfBitCounts);
-  edm::Handle<L1GctHtMissCollection> htMiss;
-  iEvent.getByLabel(gctInputLabelStr, "", htMiss);
   edm::Handle<L1GctJetCountsCollection> jetCounts;
   iEvent.getByLabel(gctInputLabelStr, "", jetCounts);
 
@@ -160,8 +158,7 @@ GctDigiToRaw::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                                         forJets.product(),
                                         tauJets.product(),
                                         hfRingSums.product(), 
-                                        hfBitCounts.product(),
-                                        htMiss.product());
+                                        hfBitCounts.product());
 
   pPayload += 36; //advance payload pointer
   

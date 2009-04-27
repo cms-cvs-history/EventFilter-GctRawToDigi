@@ -8,8 +8,8 @@
 *  Deliberately made non-copyable with const members and private copy ctor, etc.
 *
 * \author Robert Frazier
-* $Revision: 1.1 $
-* $Date: 2009/04/07 10:51:06 $
+* $Revision: 1.1.2.2 $
+* $Date: 2009/04/27 14:30:55 $
 */ 
 
 // CMSSW headers
@@ -40,7 +40,6 @@ public:
   L1GctInternJetDataCollection * const gctInternJets() const { return m_gctInternJets.get(); } ///< Internal Jet candidate collection
   L1GctInternEtSumCollection * const gctInternEtSums() const { return m_gctInternEtSums.get(); } ///< Internal Et Sum collection
   L1GctInternHFDataCollection * const gctInternHFData() const { return m_gctInternHFData.get(); } ///< Internal Hadronic-Forward bit-counts/ring-sums data collection
-  L1GctInternHtMissCollection * const gctInternHtMiss() const { return m_gctInternHtMiss.get(); } ///< Internal missing Ht collection
 
   // GCT output data
   L1GctEmCandCollection * const gctIsoEm() const { return m_gctIsoEm.get(); }  ///< GCT output: Isolated EM candidate collection
@@ -53,11 +52,8 @@ public:
   L1GctEtTotalCollection * const gctEtTot() const { return m_gctEtTot.get(); }  ///< GCT output: Total Et collection
   L1GctEtHadCollection * const gctEtHad() const { return m_gctEtHad.get(); }  ///< GCT output: Hadronic transverse-energy (Ht) collection
   L1GctEtMissCollection * const gctEtMiss() const { return m_gctEtMiss.get(); }  ///< GCT output: Missing Et collection
-  L1GctHtMissCollection * const gctHtMiss() const { return m_gctHtMiss.get(); }  ///< GCT output: Missing Ht collection
   L1GctJetCountsCollection * const gctJetCounts() const { return m_gctJetCounts.get(); } ///< DEPRECATED. ONLY GT NEEDS THIS.
 
-  // Misc
-  L1TriggerErrorCollection * const errors() const { return m_errors.get(); }  ///< Unpack error code collection.
 
 private:
 
@@ -76,7 +72,6 @@ private:
   std::auto_ptr<L1GctInternJetDataCollection> m_gctInternJets; 
   std::auto_ptr<L1GctInternEtSumCollection> m_gctInternEtSums; 
   std::auto_ptr<L1GctInternHFDataCollection> m_gctInternHFData; 
-  std::auto_ptr<L1GctInternHtMissCollection> m_gctInternHtMiss;
 
   // GCT output data
   std::auto_ptr<L1GctEmCandCollection> m_gctIsoEm;
@@ -89,12 +84,8 @@ private:
   std::auto_ptr<L1GctEtTotalCollection> m_gctEtTot;
   std::auto_ptr<L1GctEtHadCollection> m_gctEtHad;
   std::auto_ptr<L1GctEtMissCollection> m_gctEtMiss;
-  std::auto_ptr<L1GctHtMissCollection> m_gctHtMiss;
   std::auto_ptr<L1GctJetCountsCollection> m_gctJetCounts;  // DEPRECATED. ONLY GT NEEDS THIS.
   
-  // Misc
-  std::auto_ptr<L1TriggerErrorCollection> m_errors;
-
 };
 
 // Pretty print for the GctUnpackCollections sub-class

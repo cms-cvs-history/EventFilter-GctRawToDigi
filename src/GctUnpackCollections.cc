@@ -10,7 +10,6 @@ GctUnpackCollections::GctUnpackCollections(edm::Event& event):
   m_gctInternJets(new L1GctInternJetDataCollection()),
   m_gctInternEtSums(new L1GctInternEtSumCollection()),
   m_gctInternHFData(new L1GctInternHFDataCollection()),
-  m_gctInternHtMiss(new L1GctInternHtMissCollection()),
   m_gctIsoEm(new L1GctEmCandCollection()),  // GCT output collections
   m_gctNonIsoEm(new L1GctEmCandCollection()),
   m_gctCenJets(new L1GctJetCandCollection()),
@@ -21,9 +20,7 @@ GctUnpackCollections::GctUnpackCollections(edm::Event& event):
   m_gctEtTot(new L1GctEtTotalCollection()),
   m_gctEtHad(new L1GctEtHadCollection()),
   m_gctEtMiss(new L1GctEtMissCollection()),
-  m_gctHtMiss(new L1GctHtMissCollection()),
-  m_gctJetCounts(new L1GctJetCountsCollection()),  // Deprecated (empty collection still needed by GT)
-  m_errors(new L1TriggerErrorCollection())  // Misc
+  m_gctJetCounts(new L1GctJetCountsCollection())  // Deprecated (empty collection still needed by GT)
 {
   m_gctIsoEm->reserve(4);
   m_gctCenJets->reserve(4);
@@ -44,7 +41,6 @@ GctUnpackCollections::~GctUnpackCollections()
   m_event.put(m_gctInternJets);
   m_event.put(m_gctInternEtSums);
   m_event.put(m_gctInternHFData);
-  m_event.put(m_gctInternHtMiss);
 
   // GCT output collections
   m_event.put(m_gctIsoEm, "isoEm");
@@ -57,11 +53,7 @@ GctUnpackCollections::~GctUnpackCollections()
   m_event.put(m_gctEtTot);
   m_event.put(m_gctEtHad);
   m_event.put(m_gctEtMiss);
-  m_event.put(m_gctHtMiss);
   m_event.put(m_gctJetCounts);  // Deprecated (empty collection still needed by GT)
-  
-  // Misc
-  m_event.put(m_errors);
 }
 
 std::ostream& operator<<(std::ostream& os, const GctUnpackCollections& rhs)
@@ -76,7 +68,6 @@ std::ostream& operator<<(std::ostream& os, const GctUnpackCollections& rhs)
      << "Read " << rhs.gctInternJets()->size() << " GCT intermediate jet candidates\n"
      << "Read " << rhs.gctInternEtSums()->size() << " GCT intermediate et sums\n"
      << "Read " << rhs.gctInternHFData()->size() << " GCT intermediate HF data\n"
-     << "Read " << rhs.gctInternHtMiss()->size() << " GCT intermediate Missing Ht\n"
 
      // GCT output collections
      << "Read " << rhs.gctIsoEm()->size() << " GCT iso EM candidates\n"
@@ -89,9 +80,6 @@ std::ostream& operator<<(std::ostream& os, const GctUnpackCollections& rhs)
      << "Read " << rhs.gctEtTot()->size() << " GCT total et\n"
      << "Read " << rhs.gctEtHad()->size() << " GCT ht\n"
      << "Read " << rhs.gctEtMiss()->size() << " GCT met\n"
-     << "Read " << rhs.gctHtMiss()->size() << " GCT mht";
      
-     // Any point in putting in an m_errors()->size()? Not sure.
-
   return os;
 }

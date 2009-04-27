@@ -220,8 +220,7 @@ void GctFormatTranslateMCLegacy::writeGctOutJetBlock(unsigned char * d,
                                                      const L1GctJetCandCollection* forJets,
                                                      const L1GctJetCandCollection* tauJets, 
                                                      const L1GctHFRingEtSumsCollection* hfRingSums,
-                                                     const L1GctHFBitCountsCollection* hfBitCounts,
-                                                     const L1GctHtMissCollection* htMiss)
+                                                     const L1GctHFBitCountsCollection* hfBitCounts)
 {
   // Set up a vector of the collections for easy iteration.
   vector<const L1GctJetCandCollection*> jets(NUM_JET_CATEGORIES);
@@ -243,11 +242,10 @@ void GctFormatTranslateMCLegacy::writeGctOutJetBlock(unsigned char * d,
     if((jetCands->size()-offset) < 4) { LogDebug("GCT") << "Insufficient jet candidates with bx=0!\nAborting packing of GCT Jet Output!"; return; }
   }
   
-  // Now find the collection offsets for the HfRingSums, HfBitCounts, and HtMiss with bx=0
-  unsigned bx0HfRingSumsOffset, bx0HfBitCountsOffset, bx0HtMissOffset;
+  // Now find the collection offsets for the HfRingSums and HfBitCounts with bx=0
+  unsigned bx0HfRingSumsOffset, bx0HfBitCountsOffset;
   if(!findBx0OffsetInCollection(bx0HfRingSumsOffset, hfRingSums)) { LogDebug("GCT") << "No ring sums with bx=0!\nAborting packing of GCT Jet Output!"; return; }
   if(!findBx0OffsetInCollection(bx0HfBitCountsOffset, hfBitCounts)) { LogDebug("GCT") << "No bit counts with bx=0!\nAborting packing of GCT Jet Output!"; return; }
-  if(!findBx0OffsetInCollection(bx0HtMissOffset, htMiss)) { LogDebug("GCT") << "No missing Ht with bx=0!\nAborting packing of GCT Jet Output!"; return; }
 
   // Now write the header, as we should now have all requisite data.
   writeRawHeader(d, 0x583, 1);  // ** NOTE can only currenly do 1 timesample! **
@@ -286,14 +284,7 @@ void GctFormatTranslateMCLegacy::writeGctOutJetBlock(unsigned char * d,
   tmp |= hfRingSums->at(bx0HfRingSumsOffset).etSum(2)<<19;
   tmp |= hfRingSums->at(bx0HfRingSumsOffset).etSum(3)<<22;
   p32[0] = tmp;
-  
-  const L1GctHtMiss& bx0HtMiss = htMiss->at(bx0HtMissOffset);
-  uint32_t htMissRaw = 0x5555c000 |
-                       (bx0HtMiss.overFlow() ? 0x1000 : 0x0000) |
-                       ((bx0HtMiss.et() & 0x7f) << 5) |
-                       ((bx0HtMiss.phi() & 0x1f));
-  
-  p32[1] = htMissRaw;
+  p32[1] = 0x5555c000;
 }
 
 void GctFormatTranslateMCLegacy::writeRctEmCandBlocks(unsigned char * d, const L1CaloEmCollection * rctEm)
@@ -308,7 +299,7 @@ void GctFormatTranslateMCLegacy::writeRctEmCandBlocks(unsigned char * d, const L
   }
 
   // Need 18 sets of EM fibre data, since 18 RCT crates  
-  SourceCardRouting::EmuToSfpData emuToSfpData[18];
+  EmuToSfpData emuToSfpData[18];
 
   // Fill in the input arrays with the data from the digi  
   for(unsigned i=0, size=rctEm->size(); i < size ; ++i)
@@ -563,8 +554,7 @@ void GctFormatTranslateMCLegacy::blockToGctJetCandsAndCounts(const unsigned char
   colls()->gctHfBitCounts()->push_back(L1GctHFBitCounts::fromConcHFBitCounts(id,6,0,p32[0])); 
   colls()->gctHfRingEtSums()->push_back(L1GctHFRingEtSums::fromConcRingSums(id,6,0,p32[0]));
 
-  // Channel 1 carries Missing HT.
-  colls()->gctHtMiss()->push_back(L1GctHtMiss(p32[nSamples], 0));
+  // Channel 1 carries Missing HT.  Would be found at p32[nSamples].  Excluded from 22X backport for now.
 }
 
 // Input EM Candidates unpacking

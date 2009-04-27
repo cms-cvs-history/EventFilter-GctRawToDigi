@@ -8,8 +8,8 @@
 *  Deliberately made non-copyable with const members and private copy ctor, etc.
 *
 * \author Robert Frazier
-* $Revision: 1.1.2.2 $
-* $Date: 2009/04/27 14:30:55 $
+* $Revision: 1.1.2.3 $
+* $Date: 2009/04/27 16:20:14 $
 */ 
 
 // CMSSW headers
@@ -18,7 +18,6 @@
 // DataFormat headers
 #include "DataFormats/L1CaloTrigger/interface/L1CaloCollections.h"
 #include "DataFormats/L1GlobalCaloTrigger/interface/L1GctCollections.h"
-#include "DataFormats/L1Trigger/interface/L1TriggerError.h"
 
 
 class GctUnpackCollections

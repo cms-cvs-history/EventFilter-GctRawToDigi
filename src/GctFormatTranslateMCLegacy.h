@@ -11,8 +11,8 @@
 * that wasn't set to anything, i.e.: 0x00000000
 *  
 * \author Robert Frazier
-* $Revision: 1.3 $
-* $Date: 2009/04/21 15:33:16 $
+* $Revision: 1.3.2.2 $
+* $Date: 2009/04/27 14:30:54 $
 */ 
 
 // ************************************************************************
@@ -59,8 +59,7 @@ public:
                            const L1GctJetCandCollection* forJets, 
                            const L1GctJetCandCollection* tauJets, 
                            const L1GctHFRingEtSumsCollection* hfRingSums,
-                           const L1GctHFBitCountsCollection* hfBitCounts,
-                           const L1GctHtMissCollection* htMiss);
+                           const L1GctHFBitCountsCollection* hfBitCounts);
 
   /// Writes the 4 RCT EM Candidate blocks.
   void writeRctEmCandBlocks(unsigned char * d, const L1CaloEmCollection * rctEm);
@@ -106,6 +105,21 @@ private:
   typedef void (GctFormatTranslateMCLegacy::*PtrToUnpackFn)(const unsigned char *, const GctBlockHeader&);
   /// Typedef for a block ID to unpack function map.
   typedef std::map<unsigned int, PtrToUnpackFn> BlockIdToUnpackFnMap;
+  /// Struct of all data needed for running the emulator to SFP (sourcecard optical output) conversion.
+  struct EmuToSfpData
+  {
+    // Input data.
+    unsigned short eIsoRank[4];
+    unsigned short eIsoCardId[4];
+    unsigned short eIsoRegionId[4];
+    unsigned short eNonIsoRank[4];
+    unsigned short eNonIsoCardId[4];
+    unsigned short eNonIsoRegionId[4];
+    unsigned short mipBits[7][2];
+    unsigned short qBits[7][2];
+    // Output data.
+    unsigned short sfp[2][4]; // [ cycle ] [ output number ]
+  };
 
 
   /* PRIVATE MEMBER DATA */

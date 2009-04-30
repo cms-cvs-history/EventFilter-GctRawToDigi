@@ -80,7 +80,6 @@ GctRawToDigi::GctRawToDigi(const edm::ParameterSet& iConfig) :
   produces<L1GctInternEmCandCollection>();
   produces<L1GctInternJetDataCollection>();
   produces<L1GctInternEtSumCollection>();
-  produces<L1GctInternHFDataCollection>();
 
   // GCT output collections
   produces<L1GctEmCandCollection>("isoEm");

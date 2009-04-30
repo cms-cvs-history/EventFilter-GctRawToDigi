@@ -21,8 +21,8 @@
 * concrete classes that can translate to/from specific RAW formats.
 *
 * \author Robert Frazier
-* $Revision: 1.3.2.2 $
-* $Date: 2009/04/27 14:30:54 $
+* $Revision: 1.3.2.3 $
+* $Date: 2009/04/27 16:50:56 $
 */ 
 
 
@@ -134,6 +134,15 @@ protected:
   
   /// The null unpack function - obviously common to all formats.
   void blockDoNothing(const unsigned char * d, const GctBlockHeader& hdr) {}
+  
+  
+  /* Hack methods added in for the GctFormatTranslate 31X to 22X BackPort */
+  /// 31X to 22X back-port hack:  makes an L1CaloRegion in the best/most safe way using what's availble in the 22X DataFormat.
+  /*! Avoids using ambiguous constructors. No capture block or index functionality is available in 22X. */
+  L1CaloRegion makeL1CaloRegionBackPortHack(const uint16_t raw,
+                                            const unsigned ieta, 
+                                            const unsigned iphi,
+                                            const int16_t bx); 
   
 
 private:

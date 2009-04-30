@@ -8,8 +8,8 @@
 * \brief Unpacks/packs the V35 raw format
 *
 * \author Robert Frazier
-* $Revision: 1.2 $
-* $Date: 2009/04/21 15:33:17 $
+* $Revision: 1.2.2.2 $
+* $Date: 2009/04/27 14:30:54 $
 */ 
 
 // ************************************************************************
@@ -131,12 +131,6 @@ private:
   /// unpack Fibres and RCT EM Candidates
   void blockToFibresAndToRctEmCand(const unsigned char * d, const GctBlockHeader& hdr);
 
-  /// unpack GCT internal Et sums
-  void blockToGctInternEtSums(const unsigned char * d, const GctBlockHeader& hdr);
-
-  /// unpack GCT internal output of leaf jet finder
-  void blockToGctInternEtSumsAndJetCluster(const unsigned char * d, const GctBlockHeader& hdr);
-
   /// unpack GCT internal wheel and conc jets
   void blockToGctTrigObjects(const unsigned char * d, const GctBlockHeader& hdr);
 
@@ -149,11 +143,6 @@ private:
   /// unpack GCT internal HF ring sums
   void blockToGctInternRingSums(const unsigned char * d, const GctBlockHeader& hdr);
 
-  /// unpack GCT internal output of wheel
-  void blockToGctWheelOutputInternEtAndRingSums(const unsigned char * d, const GctBlockHeader& hdr);
-
-  /// unpack GCT internal input to wheel
-  void blockToGctWheelInputInternEtAndRingSums(const unsigned char * d, const GctBlockHeader& hdr);
 };
 
 #endif

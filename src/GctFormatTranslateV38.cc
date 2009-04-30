@@ -365,13 +365,13 @@ GctFormatTranslateV38::GctFormatTranslateV38(bool hltMode, bool unpackSharedRegi
     // ConcJet FPGA                                                             
     m_blockUnpackFn[0x580] = &GctFormatTranslateV38::blockToGctTrigObjects;             // ConcJet: Input TrigPathA (Jet Cands)
     m_blockUnpackFn[0x581] = &GctFormatTranslateV38::blockToGctInternRingSums;          // ConcJet: Input TrigPathB (HF Rings)
-    m_blockUnpackFn[0x582] = &GctFormatTranslateV38::blockToGctInternHtMissPostWheel;   // ConcJet: Input TrigPathC (MissHt)
+    m_blockUnpackFn[0x582] = &GctFormatTranslateV38::blockDoNothing;                    // ConcJet: Input TrigPathC (MissHt)
     m_blockUnpackFn[0x583] = &GctFormatTranslateV38::blockToGctJetCandsAndCounts;       // ConcJet: Jet Cands and Counts Output to GT
     m_blockUnpackFn[0x587] = &GctFormatTranslateV38::blockDoNothing;                    // ConcJet: BX & Orbit Info
     // ConcElec FPGA                                                            
     m_blockUnpackFn[0x680] = &GctFormatTranslateV38::blockToGctInternEmCand;            // ConcElec: Input TrigPathA (EM Cands)
-    m_blockUnpackFn[0x681] = &GctFormatTranslateV38::blockToGctInternEtSums;            // ConcElec: Input TrigPathB (Et Sums)
-    m_blockUnpackFn[0x682] = &GctFormatTranslateV38::blockToGctInternEtSums;            // ConcElec: Input TrigPathC (Ht Sums)
+    m_blockUnpackFn[0x681] = &GctFormatTranslateV38::blockDoNothing;                    // ConcElec: Input TrigPathB (Et Sums)
+    m_blockUnpackFn[0x682] = &GctFormatTranslateV38::blockDoNothing;                    // ConcElec: Input TrigPathC (Ht Sums)
     m_blockUnpackFn[0x683] = &GctFormatTranslateV38::blockToGctEmCandsAndEnergySums;    // ConcElec: EM Cands and Energy Sums Output to GT
     m_blockUnpackFn[0x686] = &GctFormatTranslateV38::blockDoNothing;                    // ConcElec: Test (GT Serdes Loopback)
     m_blockUnpackFn[0x687] = &GctFormatTranslateV38::blockDoNothing;                    // ConcElec: BX & Orbit Info
@@ -390,135 +390,135 @@ GctFormatTranslateV38::GctFormatTranslateV38(bool hltMode, bool unpackSharedRegi
     m_blockUnpackFn[0xc84] = &GctFormatTranslateV38::blockToFibresAndToRctEmCand;       // Leaf0ElecNegEtaU2: Raw Input
     // Wheel Pos-eta Jet FPGA                                                   
     m_blockUnpackFn[0x300] = &GctFormatTranslateV38::blockToGctJetClusterMinimal;       // WheelPosEtaJet: Input TrigPathA (Jet Sort)
-    m_blockUnpackFn[0x301] = &GctFormatTranslateV38::blockToGctInternHtMissPreWheel;    // WheelPosEtaJet: Input TrigPathB (MissHt)
+    m_blockUnpackFn[0x301] = &GctFormatTranslateV38::blockDoNothing;                    // WheelPosEtaJet: Input TrigPathB (MissHt)
     m_blockUnpackFn[0x303] = &GctFormatTranslateV38::blockToGctTrigObjects;             // WheelPosEtaJet: Output TrigPathA (Jet Sort)
-    m_blockUnpackFn[0x305] = &GctFormatTranslateV38::blockToGctInternHtMissPostWheel;   // WheelPosEtaJet: Output TrigPathB (MissHt)
+    m_blockUnpackFn[0x305] = &GctFormatTranslateV38::blockDoNothing;                    // WheelPosEtaJet: Output TrigPathB (MissHt)
     m_blockUnpackFn[0x306] = &GctFormatTranslateV38::blockDoNothing;                    // WheelPosEtaJet: Test (deprecated)  (Doesn't exist in V27.1 format, but does in V24 & V25, so keep for CRUZET2 data compatibility reasons)
     m_blockUnpackFn[0x307] = &GctFormatTranslateV38::blockDoNothing;                    // WheelPosEtaJet: Info (deprecated)  (Doesn't exist in V27.1 format, but does in V24 & V25, so keep for CRUZET2 data compatibility reasons)
     // Wheel Pos-eta Energy FPGA                                                
-    m_blockUnpackFn[0x380] = &GctFormatTranslateV38::blockToGctWheelInputInternEtAndRingSums;     // WheelPosEtaEnergy: Input TrigPathA (Et)
-    m_blockUnpackFn[0x381] = &GctFormatTranslateV38::blockToGctInternEtSums;            // WheelPosEtaEnergy: Input TrigPathB (Ht)
-    m_blockUnpackFn[0x383] = &GctFormatTranslateV38::blockToGctWheelOutputInternEtAndRingSums;     // WheelPosEtaEnergy: Output TrigPathA (Et)
-    m_blockUnpackFn[0x385] = &GctFormatTranslateV38::blockToGctInternEtSums;            // WheelPosEtaEnergy: Output TrigPathB (Ht)
+    m_blockUnpackFn[0x380] = &GctFormatTranslateV38::blockDoNothing;                    // WheelPosEtaEnergy: Input TrigPathA (Et)
+    m_blockUnpackFn[0x381] = &GctFormatTranslateV38::blockDoNothing;                    // WheelPosEtaEnergy: Input TrigPathB (Ht)
+    m_blockUnpackFn[0x383] = &GctFormatTranslateV38::blockDoNothing;                    // WheelPosEtaEnergy: Output TrigPathA (Et)
+    m_blockUnpackFn[0x385] = &GctFormatTranslateV38::blockDoNothing;                    // WheelPosEtaEnergy: Output TrigPathB (Ht)
     m_blockUnpackFn[0x386] = &GctFormatTranslateV38::blockDoNothing;                    // WheelPosEtaEnergy: Test
     m_blockUnpackFn[0x387] = &GctFormatTranslateV38::blockDoNothing;                    // WheelPosEtaEnergy: BX & Orbit Info   (Potential data incompatibility between V24/V25 where block length=4, and V27.1 where block length=6)
     // Wheel Neg-eta Jet FPGA                                                   
     m_blockUnpackFn[0x700] = &GctFormatTranslateV38::blockToGctJetClusterMinimal;       // WheelNegEtaJet: Input TrigPathA (Jet Sort)
-    m_blockUnpackFn[0x701] = &GctFormatTranslateV38::blockToGctInternHtMissPreWheel;    // WheelNegEtaJet: Input TrigPathB (MissHt)
+    m_blockUnpackFn[0x701] = &GctFormatTranslateV38::blockDoNothing;                    // WheelNegEtaJet: Input TrigPathB (MissHt)
     m_blockUnpackFn[0x703] = &GctFormatTranslateV38::blockToGctTrigObjects;             // WheelNegEtaJet: Output TrigPathA (Jet Sort)
-    m_blockUnpackFn[0x705] = &GctFormatTranslateV38::blockToGctInternHtMissPostWheel;   // WheelNegEtaJet: Output TrigPathB (MissHt)    
+    m_blockUnpackFn[0x705] = &GctFormatTranslateV38::blockDoNothing;                    // WheelNegEtaJet: Output TrigPathB (MissHt)    
     m_blockUnpackFn[0x706] = &GctFormatTranslateV38::blockDoNothing;                    // WheelNegEtaJet: Test (deprecated)  (Doesn't exist in V27.1 format, but does in V24 & V25, so keep for CRUZET2 data compatibility reasons)
     m_blockUnpackFn[0x707] = &GctFormatTranslateV38::blockDoNothing;                    // WheelNegEtaJet: Info (deprecated)  (Doesn't exist in V27.1 format, but does in V24 & V25, so keep for CRUZET2 data compatibility reasons)
     // Wheel Neg-eta Energy FPGA                                                
-    m_blockUnpackFn[0x780] = &GctFormatTranslateV38::blockToGctWheelInputInternEtAndRingSums;     // WheelNegEtaEnergy: Input TrigPathA (Et)
-    m_blockUnpackFn[0x781] = &GctFormatTranslateV38::blockToGctInternEtSums;            // WheelNegEtaEnergy: Input TrigPathB (Ht)
-    m_blockUnpackFn[0x783] = &GctFormatTranslateV38::blockToGctWheelOutputInternEtAndRingSums;     // WheelNegEtaEnergy: Output TrigPathA (Et)
-    m_blockUnpackFn[0x785] = &GctFormatTranslateV38::blockToGctInternEtSums;            // WheelNegEtaEnergy: Output TrigPathB (Ht)
+    m_blockUnpackFn[0x780] = &GctFormatTranslateV38::blockDoNothing;                    // WheelNegEtaEnergy: Input TrigPathA (Et)
+    m_blockUnpackFn[0x781] = &GctFormatTranslateV38::blockDoNothing;                    // WheelNegEtaEnergy: Input TrigPathB (Ht)
+    m_blockUnpackFn[0x783] = &GctFormatTranslateV38::blockDoNothing;                    // WheelNegEtaEnergy: Output TrigPathA (Et)
+    m_blockUnpackFn[0x785] = &GctFormatTranslateV38::blockDoNothing;                    // WheelNegEtaEnergy: Output TrigPathB (Ht)
     m_blockUnpackFn[0x786] = &GctFormatTranslateV38::blockDoNothing;                    // WheelNegEtaEnergy: Test
     m_blockUnpackFn[0x787] = &GctFormatTranslateV38::blockDoNothing;                    // WheelNegEtaEnergy: BX & Orbit Info   (Potential data incompatibility between V24/V25 where block length=4, and V27.1 where block length=6)
     // Jet Leaf FPGAs - Positive Eta
     m_blockUnpackFn[0x900] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf1JetPosEtaU1: JF2 Input
     m_blockUnpackFn[0x901] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf1JetPosEtaU1: JF2 Shared Received
     m_blockUnpackFn[0x902] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf1JetPosEtaU1: JF2 Shared Sent
-    m_blockUnpackFn[0x903] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf1JetPosEtaU1: JF2 Output
+    m_blockUnpackFn[0x903] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf1JetPosEtaU1: JF2 Output
     m_blockUnpackFn[0x904] = &GctFormatTranslateV38::blockToFibres;                     // Leaf1JetPosEtaU1: JF2 Raw Input
     m_blockUnpackFn[0x908] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf1JetPosEtaU1: JF3 Input
     m_blockUnpackFn[0x909] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf1JetPosEtaU1: JF3 Shared Received
     m_blockUnpackFn[0x90a] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf1JetPosEtaU1: JF3 Shared Sent
-    m_blockUnpackFn[0x90b] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf1JetPosEtaU1: JF3 Output
+    m_blockUnpackFn[0x90b] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf1JetPosEtaU1: JF3 Output
     m_blockUnpackFn[0x90c] = &GctFormatTranslateV38::blockToFibres;                     // Leaf1JetPosEtaU1: JF3 Raw Input
     m_blockUnpackFn[0x980] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf1JetPosEtaU2: Eta0 Input
     m_blockUnpackFn[0x984] = &GctFormatTranslateV38::blockToFibres;                     // Leaf1JetPosEtaU2: Eta0 Raw Input
     m_blockUnpackFn[0x988] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf1JetPosEtaU2: JF1 Input
     m_blockUnpackFn[0x989] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf1JetPosEtaU2: JF1 Shared Received
     m_blockUnpackFn[0x98a] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf1JetPosEtaU2: JF1 Shared Sent
-    m_blockUnpackFn[0x98b] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf1JetPosEtaU2: JF1 Output
+    m_blockUnpackFn[0x98b] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf1JetPosEtaU2: JF1 Output
     m_blockUnpackFn[0x98c] = &GctFormatTranslateV38::blockToFibres;                     // Leaf1JetPosEtaU2: JF1 Raw Input
     m_blockUnpackFn[0xa00] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf2JetPosEtaU1: JF2 Input
     m_blockUnpackFn[0xa01] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf2JetPosEtaU1: JF2 Shared Received
     m_blockUnpackFn[0xa02] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf2JetPosEtaU1: JF2 Shared Sent
-    m_blockUnpackFn[0xa03] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf2JetPosEtaU1: JF2 Output
+    m_blockUnpackFn[0xa03] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf2JetPosEtaU1: JF2 Output
     m_blockUnpackFn[0xa04] = &GctFormatTranslateV38::blockToFibres;                     // Leaf2JetPosEtaU1: JF2 Raw Input
     m_blockUnpackFn[0xa08] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf2JetPosEtaU1: JF3 Input
     m_blockUnpackFn[0xa09] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf2JetPosEtaU1: JF3 Shared Received
     m_blockUnpackFn[0xa0a] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf2JetPosEtaU1: JF3 Shared Sent
-    m_blockUnpackFn[0xa0b] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf2JetPosEtaU1: JF3 Output
+    m_blockUnpackFn[0xa0b] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf2JetPosEtaU1: JF3 Output
     m_blockUnpackFn[0xa0c] = &GctFormatTranslateV38::blockToFibres;                     // Leaf2JetPosEtaU1: JF3 Raw Input
     m_blockUnpackFn[0xa80] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf2JetPosEtaU2: Eta0 Input
     m_blockUnpackFn[0xa84] = &GctFormatTranslateV38::blockToFibres;                     // Leaf2JetPosEtaU2: Eta0 Raw Input
     m_blockUnpackFn[0xa88] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf2JetPosEtaU2: JF1 Input
     m_blockUnpackFn[0xa89] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf2JetPosEtaU2: JF1 Shared Received
     m_blockUnpackFn[0xa8a] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf2JetPosEtaU2: JF1 Shared Sent
-    m_blockUnpackFn[0xa8b] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf2JetPosEtaU2: JF1 Output
+    m_blockUnpackFn[0xa8b] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf2JetPosEtaU2: JF1 Output
     m_blockUnpackFn[0xa8c] = &GctFormatTranslateV38::blockToFibres;                     // Leaf2JetPosEtaU2: JF1 Raw Input
     m_blockUnpackFn[0xb00] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf3JetPosEtaU1: JF2 Input
     m_blockUnpackFn[0xb01] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf3JetPosEtaU1: JF2 Shared Received
     m_blockUnpackFn[0xb02] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf3JetPosEtaU1: JF2 Shared Sent
-    m_blockUnpackFn[0xb03] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf3JetPosEtaU1: JF2 Output
+    m_blockUnpackFn[0xb03] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf3JetPosEtaU1: JF2 Output
     m_blockUnpackFn[0xb04] = &GctFormatTranslateV38::blockToFibres;                     // Leaf3JetPosEtaU1: JF2 Raw Input
     m_blockUnpackFn[0xb08] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf3JetPosEtaU1: JF3 Input
     m_blockUnpackFn[0xb09] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf3JetPosEtaU1: JF3 Shared Received
     m_blockUnpackFn[0xb0a] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf3JetPosEtaU1: JF3 Shared Sent
-    m_blockUnpackFn[0xb0b] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf3JetPosEtaU1: JF3 Output
+    m_blockUnpackFn[0xb0b] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf3JetPosEtaU1: JF3 Output
     m_blockUnpackFn[0xb0c] = &GctFormatTranslateV38::blockToFibres;                     // Leaf3JetPosEtaU1: JF3 Raw Input
     m_blockUnpackFn[0xb80] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf3JetPosEtaU2: Eta0 Input
     m_blockUnpackFn[0xb84] = &GctFormatTranslateV38::blockToFibres;                     // Leaf3JetPosEtaU2: Eta0 Raw Input
     m_blockUnpackFn[0xb88] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf3JetPosEtaU2: JF1 Input
     m_blockUnpackFn[0xb89] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf3JetPosEtaU2: JF1 Shared Received
     m_blockUnpackFn[0xb8a] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf3JetPosEtaU2: JF1 Shared Sent
-    m_blockUnpackFn[0xb8b] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf3JetPosEtaU2: JF1 Output
+    m_blockUnpackFn[0xb8b] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf3JetPosEtaU2: JF1 Output
     m_blockUnpackFn[0xb8c] = &GctFormatTranslateV38::blockToFibres;                     // Leaf3JetPosEtaU2: JF1 Raw Input
     // Jet Leaf FPGAs - Negative Eta
     m_blockUnpackFn[0xd00] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf1JetNegEtaU1: JF2 Input
     m_blockUnpackFn[0xd01] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf1JetNegEtaU1: JF2 Shared Received
     m_blockUnpackFn[0xd02] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf1JetNegEtaU1: JF2 Shared Sent
-    m_blockUnpackFn[0xd03] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf1JetNegEtaU1: JF2 Output
+    m_blockUnpackFn[0xd03] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf1JetNegEtaU1: JF2 Output
     m_blockUnpackFn[0xd04] = &GctFormatTranslateV38::blockToFibres;                     // Leaf1JetNegEtaU1: JF2 Raw Input
     m_blockUnpackFn[0xd08] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf1JetNegEtaU1: JF3 Input
     m_blockUnpackFn[0xd09] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf1JetNegEtaU1: JF3 Shared Received
     m_blockUnpackFn[0xd0a] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf1JetNegEtaU1: JF3 Shared Sent
-    m_blockUnpackFn[0xd0b] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf1JetNegEtaU1: JF3 Output
+    m_blockUnpackFn[0xd0b] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf1JetNegEtaU1: JF3 Output
     m_blockUnpackFn[0xd0c] = &GctFormatTranslateV38::blockToFibres;                     // Leaf1JetNegEtaU1: JF3 Raw Input
     m_blockUnpackFn[0xd80] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf1JetNegEtaU2: Eta0 Input
     m_blockUnpackFn[0xd84] = &GctFormatTranslateV38::blockToFibres;                     // Leaf1JetNegEtaU2: Eta0 Raw Input
     m_blockUnpackFn[0xd88] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf1JetNegEtaU2: JF1 Input
     m_blockUnpackFn[0xd89] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf1JetNegEtaU2: JF1 Shared Received
     m_blockUnpackFn[0xd8a] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf1JetNegEtaU2: JF1 Shared Sent
-    m_blockUnpackFn[0xd8b] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf1JetNegEtaU2: JF1 Output
+    m_blockUnpackFn[0xd8b] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf1JetNegEtaU2: JF1 Output
     m_blockUnpackFn[0xd8c] = &GctFormatTranslateV38::blockToFibres;                     // Leaf1JetNegEtaU2: JF1 Raw Input
     m_blockUnpackFn[0xe00] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf2JetNegEtaU1: JF2 Input
     m_blockUnpackFn[0xe01] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf2JetNegEtaU1: JF2 Shared Received
     m_blockUnpackFn[0xe02] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf2JetNegEtaU1: JF2 Shared Sent
-    m_blockUnpackFn[0xe03] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf2JetNegEtaU1: JF2 Output
+    m_blockUnpackFn[0xe03] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf2JetNegEtaU1: JF2 Output
     m_blockUnpackFn[0xe04] = &GctFormatTranslateV38::blockToFibres;                     // Leaf2JetNegEtaU1: JF2 Raw Input
     m_blockUnpackFn[0xe08] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf2JetNegEtaU1: JF3 Input
     m_blockUnpackFn[0xe09] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf2JetNegEtaU1: JF3 Shared Received
     m_blockUnpackFn[0xe0a] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf2JetNegEtaU1: JF3 Shared Sent
-    m_blockUnpackFn[0xe0b] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf2JetNegEtaU1: JF3 Output
+    m_blockUnpackFn[0xe0b] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf2JetNegEtaU1: JF3 Output
     m_blockUnpackFn[0xe0c] = &GctFormatTranslateV38::blockToFibres;                     // Leaf2JetNegEtaU1: JF3 Raw Input
     m_blockUnpackFn[0xe80] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf2JetNegEtaU2: Eta0 Input
     m_blockUnpackFn[0xe84] = &GctFormatTranslateV38::blockToFibres;                     // Leaf2JetNegEtaU2: Eta0 Raw Input
     m_blockUnpackFn[0xe88] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf2JetNegEtaU2: JF1 Input
     m_blockUnpackFn[0xe89] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf2JetNegEtaU2: JF1 Shared Received
     m_blockUnpackFn[0xe8a] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf2JetNegEtaU2: JF1 Shared Sent
-    m_blockUnpackFn[0xe8b] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf2JetNegEtaU2: JF1 Output
+    m_blockUnpackFn[0xe8b] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf2JetNegEtaU2: JF1 Output
     m_blockUnpackFn[0xe8c] = &GctFormatTranslateV38::blockToFibres;                     // Leaf2JetNegEtaU2: JF1 Raw Input
     m_blockUnpackFn[0xf00] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf3JetNegEtaU1: JF2 Input
     m_blockUnpackFn[0xf01] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf3JetNegEtaU1: JF2 Shared Received
     m_blockUnpackFn[0xf02] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf3JetNegEtaU1: JF2 Shared Sent
-    m_blockUnpackFn[0xf03] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf3JetNegEtaU1: JF2 Output
+    m_blockUnpackFn[0xf03] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf3JetNegEtaU1: JF2 Output
     m_blockUnpackFn[0xf04] = &GctFormatTranslateV38::blockToFibres;                     // Leaf3JetNegEtaU1: JF2 Raw Input
     m_blockUnpackFn[0xf08] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf3JetNegEtaU1: JF3 Input
     m_blockUnpackFn[0xf09] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf3JetNegEtaU1: JF3 Shared Received
     m_blockUnpackFn[0xf0a] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf3JetNegEtaU1: JF3 Shared Sent
-    m_blockUnpackFn[0xf0b] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf3JetNegEtaU1: JF3 Output
+    m_blockUnpackFn[0xf0b] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf3JetNegEtaU1: JF3 Output
     m_blockUnpackFn[0xf0c] = &GctFormatTranslateV38::blockToFibres;                     // Leaf3JetNegEtaU1: JF3 Raw Input
     m_blockUnpackFn[0xf80] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf3JetNegEtaU2: Eta0 Input
     m_blockUnpackFn[0xf84] = &GctFormatTranslateV38::blockToFibres;                     // Leaf3JetNegEtaU2: Eta0 Raw Input
     m_blockUnpackFn[0xf88] = &GctFormatTranslateV38::blockToRctCaloRegions;             // Leaf3JetNegEtaU2: JF1 Input
     m_blockUnpackFn[0xf89] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf3JetNegEtaU2: JF1 Shared Received
     m_blockUnpackFn[0xf8a] = &GctFormatTranslateV38::blockToGctJetPreCluster;           // Leaf3JetNegEtaU2: JF1 Shared Sent
-    m_blockUnpackFn[0xf8b] = &GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster;// Leaf3JetNegEtaU2: JF1 Output
+    m_blockUnpackFn[0xf8b] = &GctFormatTranslateV38::blockDoNothing;                    // Leaf3JetNegEtaU2: JF1 Output
     m_blockUnpackFn[0xf8c] = &GctFormatTranslateV38::blockToFibres;                     // Leaf3JetNegEtaU2: JF1 Raw Input
 
 
@@ -743,8 +743,7 @@ void GctFormatTranslateV38::blockToGctJetCandsAndCounts(const unsigned char * d,
   colls()->gctHfBitCounts()->push_back(L1GctHFBitCounts::fromConcHFBitCounts(id,6,0,p32[0])); 
   colls()->gctHfRingEtSums()->push_back(L1GctHFRingEtSums::fromConcRingSums(id,6,0,p32[0]));
 
-  // Channel 1 carries Missing HT.
-  colls()->gctHtMiss()->push_back(L1GctHtMiss(p32[nSamples], 0));
+  // Channel 1 carries Missing HT.  Would be found at p32[nSamples].  Excluded from 22X backport for now.
 }
 
 // Internal EM Candidates unpacking
@@ -882,23 +881,23 @@ void GctFormatTranslateV38::blockToRctCaloRegions(const unsigned char * d, const
       // Skip the first four regions (i.e. where i<2) which are duplicates (shared data).
       if (i>1) { 
         // First region is phi=0
-        colls()->rctCalo()->push_back( L1CaloRegion::makeRegionFromUnpacker(*p, ieta, iphi, id, i, bx) );
+        colls()->rctCalo()->push_back( makeL1CaloRegionBackPortHack(*p, ieta, iphi, bx) );
         ++p;
         // Second region is phi=1
         if (iphi>0) { iphi-=1; }
         else { iphi = 17; }
-        colls()->rctCalo()->push_back( L1CaloRegion::makeRegionFromUnpacker(*p, ieta, iphi, id, i, bx) );
+        colls()->rctCalo()->push_back( makeL1CaloRegionBackPortHack(*p, ieta, iphi, bx) );
         ++p;
       }
       // Unpack the shared data if asked for debugging
       else if (unpackSharedRegions()){
         // First region is phi=0
-        colls()->rctCalo()->push_back( L1CaloRegion::makeRegionFromUnpacker(*p, ieta, iphi, id, i, bx) );
+        colls()->rctCalo()->push_back( makeL1CaloRegionBackPortHack(*p, ieta, iphi, bx) );
         ++p;
         // Second region is phi=1
         if (iphi>0) { iphi-=1; }
         else { iphi = 17; }
-        colls()->rctCalo()->push_back( L1CaloRegion::makeRegionFromUnpacker(*p, ieta, iphi, id, i, bx) );
+        colls()->rctCalo()->push_back( makeL1CaloRegionBackPortHack(*p, ieta, iphi, bx) );
         ++p;
         
       } else { // Skip the shared data  
@@ -934,54 +933,6 @@ void GctFormatTranslateV38::blockToFibresAndToRctEmCand(const unsigned char * d,
 {
   this->blockToRctEmCand(d, hdr);
   this->blockToFibres(d, hdr);
-}
-
-void GctFormatTranslateV38::blockToGctInternEtSums(const unsigned char * d, const GctBlockHeader& hdr)
-{
-  // Don't want to do this in HLT optimisation mode!                                                                                                                           
-  
-  if(hltMode()) { LogDebug("GCT") << "HLT mode - skipping unpack of internal Et Sums"; return; }
-
-  unsigned int id = hdr.blockId();
-  unsigned int nSamples = hdr.nSamples();
-  unsigned int length = hdr.blockLength();
-
-  // Re-interpret pointer to 32 bits 
-  uint32_t * p = reinterpret_cast<uint32_t *>(const_cast<unsigned char *>(d));
-
-  for (unsigned int i=0; i<length; ++i) {
-    // Loop over timesamples (i.e. bunch crossings)                                                                                                                            
-    for (unsigned int bx=0; bx<nSamples; ++bx) {
-      colls()->gctInternEtSums()->push_back(L1GctInternEtSum::fromTotalEtOrHt(id,i,bx,*p));
-      ++p;
-    }
-  }
-}
-
-void GctFormatTranslateV38::blockToGctInternEtSumsAndJetCluster(const unsigned char * d, const GctBlockHeader& hdr)
-{
-  // Don't want to do this in HLT optimisation mode!
-  if(hltMode()) { LogDebug("GCT") << "HLT mode - skipping unpack of internal Jet Cands"; return; }
-
-  unsigned int id = hdr.blockId();
-  unsigned int nSamples = hdr.nSamples();
-  unsigned int length = hdr.blockLength();
-
-  // Re-interpret pointer to 32 bits 
-  uint32_t * p = reinterpret_cast<uint32_t *>(const_cast<unsigned char *>(d));
-
-  for (unsigned int i=0; i<length; ++i) {
-    // Loop over timesamples (i.e. bunch crossings)
-    for (unsigned int bx=0; bx<nSamples; ++bx) {
-      if (i<2) colls()->gctInternEtSums()->push_back(L1GctInternEtSum::fromJetMissEt(id,i,bx,*p));
-      if (i==3){
-        colls()->gctInternEtSums()->push_back(L1GctInternEtSum::fromJetTotEt(id,i,bx,*p));
-        colls()->gctInternEtSums()->push_back(L1GctInternEtSum::fromJetTotHt(id,i,bx,*p));
-      } 
-      if (i>4) colls()->gctInternJets()->push_back(L1GctInternJetData::fromJetCluster(L1CaloRegionDetId(0,0),id,i,bx,*p));
-      ++p;
-    }  
-  }
 }
 
 void GctFormatTranslateV38::blockToGctTrigObjects(const unsigned char * d, const GctBlockHeader& hdr)
@@ -1075,110 +1026,5 @@ void GctFormatTranslateV38::blockToGctInternRingSums(const unsigned char * d, co
       colls()->gctInternHFData()->push_back(L1GctInternHFData::fromConcBitCounts(id,i,bx,*p));
       ++p;
     }  
-  }
-}
-
-void GctFormatTranslateV38::blockToGctWheelInputInternEtAndRingSums(const unsigned char * d, const GctBlockHeader& hdr)
-{
-  // Don't want to do this in HLT optimisation mode!
-  if(hltMode()) { LogDebug("GCT") << "HLT mode - skipping unpack of wheel input internal Et sums and HF ring data"; return; }
-
-  unsigned int id = hdr.blockId();
-  unsigned int nSamples = hdr.nSamples();
-  unsigned int length = hdr.blockLength();
-
-  // Re-interpret pointer to 32 bits 
-  uint32_t * p = reinterpret_cast<uint32_t *>(const_cast<unsigned char *>(d));
-
-  for (unsigned int i=0; i<length; ++i) {
-    // Loop over timesamples (i.e. bunch crossings)
-    for (unsigned int bx=0; bx<nSamples; ++bx) {
-      if (i<3){
-        colls()->gctInternEtSums()->push_back(L1GctInternEtSum::fromTotalEtOrHt(id,i,bx,*p));
-      } else if (i>2 && i<9) {
-        colls()->gctInternEtSums()->push_back(L1GctInternEtSum::fromMissEtxOrEty(id,i,bx,*p));
-      } else if (i>8 && i<15) {
-        colls()->gctInternHFData()->push_back(L1GctInternHFData::fromWheelRingSums(id,i,bx,*p));
-      } else if (i>14){
-        colls()->gctInternHFData()->push_back(L1GctInternHFData::fromWheelBitCounts(id,i,bx,*p));
-      }
-      ++p;
-    }
-  }
-}
-
-void GctFormatTranslateV38::blockToGctWheelOutputInternEtAndRingSums(const unsigned char * d, const GctBlockHeader& hdr)
-{
-  // Don't want to do this in HLT optimisation mode!
-  if(hltMode()) { LogDebug("GCT") << "HLT mode - skipping unpack of wheel output internal Et sums and HF ring data"; return; }
-
-  unsigned int id = hdr.blockId();
-  unsigned int nSamples = hdr.nSamples();
-  unsigned int length = hdr.blockLength();
-
-  // Re-interpret pointer to 32 bits 
-  uint32_t * p = reinterpret_cast<uint32_t *>(const_cast<unsigned char *>(d));
-
-  for (unsigned int i=0; i<length; ++i) {
-    // Loop over timesamples (i.e. bunch crossings)
-    for (unsigned int bx=0; bx<nSamples; ++bx) {
-      if (i<1){
-        colls()->gctInternEtSums()->push_back(L1GctInternEtSum::fromTotalEtOrHt(id,i,bx,*p));
-      } else if (i>0 && i<3) {
-        colls()->gctInternEtSums()->push_back(L1GctInternEtSum::fromMissEtxOrEty(id,i,bx,*p));
-      } else if (i>2 && i<5) {
-        colls()->gctInternHFData()->push_back(L1GctInternHFData::fromWheelRingSums(id,i,bx,*p));
-      } else if (i>4){
-        colls()->gctInternHFData()->push_back(L1GctInternHFData::fromWheelBitCounts(id,i,bx,*p));
-      }
-      ++p;
-    }
-  }
-}
-
-void GctFormatTranslateV38::blockToGctInternHtMissPreWheel(const unsigned char* d, const GctBlockHeader& hdr)
-{
-  // Don't want to do this in HLT optimisation mode!
-  if(hltMode()) { LogDebug("GCT") << "HLT mode - skipping unpack of pre-wheel internal Missing Ht data"; return; }
-
-  unsigned int id = hdr.blockId();
-  unsigned int nSamples = hdr.nSamples();
-  unsigned int length = hdr.blockLength();
-
-  // Re-interpret pointer to 32 bits 
-  uint32_t * p = reinterpret_cast<uint32_t *>(const_cast<unsigned char *>(d));
-  
-  for (unsigned int iLength=0; iLength < length; ++iLength)
-  {
-    // Loop over timesamples (i.e. bunch crossings)
-    for (unsigned int bx=0; bx<nSamples; ++bx) 
-    {
-      colls()->gctInternHtMiss()->push_back(L1GctInternHtMiss::unpackerMissHtxHty(id, iLength, bx, *p));
-      ++p;
-    }
-  }
-}
-
-void GctFormatTranslateV38::blockToGctInternHtMissPostWheel(const unsigned char* d, const GctBlockHeader& hdr)
-{
-  // Don't want to do this in HLT optimisation mode!
-  if(hltMode()) { LogDebug("GCT") << "HLT mode - skipping unpack of post-wheel internal Missing Ht data"; return; }
-
-  unsigned int id = hdr.blockId();
-  unsigned int nSamples = hdr.nSamples();
-  unsigned int length = hdr.blockLength();
-
-  // Re-interpret pointer to 32 bits 
-  uint32_t * p = reinterpret_cast<uint32_t *>(const_cast<unsigned char *>(d));
-
-  for (unsigned int iLength=0; iLength < length; ++iLength)
-  {
-    // Loop over timesamples (i.e. bunch crossings)
-    for (unsigned int bx=0; bx<nSamples; ++bx) 
-    {
-      if(iLength % 2) { colls()->gctInternHtMiss()->push_back(L1GctInternHtMiss::unpackerMissHty(id, iLength, bx, *p)); }  // Hty on odd numbers
-      else { colls()->gctInternHtMiss()->push_back(L1GctInternHtMiss::unpackerMissHtx(id, iLength, bx, *p)); } // Htx on even numbers
-      ++p;
-    }
   }
 }

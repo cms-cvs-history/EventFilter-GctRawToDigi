@@ -65,3 +65,17 @@ bool GctFormatTranslateBase::checkBlock(const GctBlockHeader& hdr) const
 }
 
 
+// PROTECTED METHODS ADDED IN FOR THE 31X to 22X BACKPORT HACKERY.
+
+L1CaloRegion GctFormatTranslateBase::makeL1CaloRegionBackPortHack(const uint16_t raw,
+                                                                  const unsigned ieta, 
+                                                                  const unsigned iphi,
+                                                                  const int16_t bx)
+{
+  unsigned et = raw & 0x3ff;
+  bool overflow = (raw & 0x400) != 0;
+  bool tauVeto = (raw & 0x800) != 0;
+  L1CaloRegion l1CaloRegion(et, overflow, tauVeto, false, false, ieta, iphi);
+  l1CaloRegion.setBx(bx);
+  return l1CaloRegion;
+}

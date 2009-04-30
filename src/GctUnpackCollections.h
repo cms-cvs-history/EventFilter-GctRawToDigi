@@ -8,8 +8,8 @@
 *  Deliberately made non-copyable with const members and private copy ctor, etc.
 *
 * \author Robert Frazier
-* $Revision: 1.1.2.3 $
-* $Date: 2009/04/27 16:20:14 $
+* $Revision: 1.1.2.4 $
+* $Date: 2009/04/27 16:50:56 $
 */ 
 
 // CMSSW headers
@@ -24,7 +24,8 @@ class GctUnpackCollections
 {
 public:
   /// Construct with an event. The collections get put into the event when the object instance goes out of scope (i.e. in the destructor).
-  GctUnpackCollections(edm::Event& event);
+  /*! \param hltMode flag is added here as part of the 31X to 22X backport. It's needed to control what gets put into the event. */
+  GctUnpackCollections(edm::Event& event, const bool hltMode);
 
   /// Destructor - the last action of this object is to put the gct collections into the event provided on construction.
   ~GctUnpackCollections();
@@ -38,7 +39,6 @@ public:
   L1GctInternEmCandCollection * const gctInternEm() const { return m_gctInternEm.get(); }  ///< Internal EM candidate collection
   L1GctInternJetDataCollection * const gctInternJets() const { return m_gctInternJets.get(); } ///< Internal Jet candidate collection
   L1GctInternEtSumCollection * const gctInternEtSums() const { return m_gctInternEtSums.get(); } ///< Internal Et Sum collection
-  L1GctInternHFDataCollection * const gctInternHFData() const { return m_gctInternHFData.get(); } ///< Internal Hadronic-Forward bit-counts/ring-sums data collection
 
   // GCT output data
   L1GctEmCandCollection * const gctIsoEm() const { return m_gctIsoEm.get(); }  ///< GCT output: Isolated EM candidate collection
@@ -60,6 +60,7 @@ private:
   GctUnpackCollections& operator=(const GctUnpackCollections&); ///< Assignment op - deliberately not implemented!  
 
   edm::Event& m_event;  ///< The event the collections will be put into on destruction of the GctUnpackCollections instance.
+  const bool m_hltMode;  ///< For the 31X to 22X backport, the hltMode flag is needed here to control what is put into the event.
 
   // Collections for storing GCT input data.  
   std::auto_ptr<L1GctFibreCollection> m_gctFibres;  ///< Raw fibre input to the GCT.
@@ -70,7 +71,6 @@ private:
   std::auto_ptr<L1GctInternEmCandCollection> m_gctInternEm; 
   std::auto_ptr<L1GctInternJetDataCollection> m_gctInternJets; 
   std::auto_ptr<L1GctInternEtSumCollection> m_gctInternEtSums; 
-  std::auto_ptr<L1GctInternHFDataCollection> m_gctInternHFData; 
 
   // GCT output data
   std::auto_ptr<L1GctEmCandCollection> m_gctIsoEm;

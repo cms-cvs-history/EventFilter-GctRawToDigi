@@ -1,15 +1,15 @@
 #include "EventFilter/GctRawToDigi/src/GctUnpackCollections.h"
 
 
-GctUnpackCollections::GctUnpackCollections(edm::Event& event):
+GctUnpackCollections::GctUnpackCollections(edm::Event& event, const bool hltMode):
   m_event(event),
+  m_hltMode(hltMode),
   m_gctFibres(new L1GctFibreCollection()),  // GCT input collections
   m_rctEm(new L1CaloEmCollection()),
   m_rctCalo(new L1CaloRegionCollection()),
   m_gctInternEm(new L1GctInternEmCandCollection()),  // GCT internal collections
   m_gctInternJets(new L1GctInternJetDataCollection()),
   m_gctInternEtSums(new L1GctInternEtSumCollection()),
-  m_gctInternHFData(new L1GctInternHFDataCollection()),
   m_gctIsoEm(new L1GctEmCandCollection()),  // GCT output collections
   m_gctNonIsoEm(new L1GctEmCandCollection()),
   m_gctCenJets(new L1GctJetCandCollection()),
@@ -32,15 +32,17 @@ GctUnpackCollections::GctUnpackCollections(edm::Event& event):
 GctUnpackCollections::~GctUnpackCollections()
 {
   // GCT input collections
-  m_event.put(m_gctFibres);
+  if(!m_hltMode) { m_event.put(m_gctFibres); }
   m_event.put(m_rctEm);
   m_event.put(m_rctCalo);
 
   // GCT internal collections
-  m_event.put(m_gctInternEm);
-  m_event.put(m_gctInternJets);
-  m_event.put(m_gctInternEtSums);
-  m_event.put(m_gctInternHFData);
+  if(!m_hltMode)
+  {
+    m_event.put(m_gctInternEm);
+    m_event.put(m_gctInternJets);
+    m_event.put(m_gctInternEtSums);
+  }
 
   // GCT output collections
   m_event.put(m_gctIsoEm, "isoEm");
@@ -67,7 +69,6 @@ std::ostream& operator<<(std::ostream& os, const GctUnpackCollections& rhs)
      << "Read " << rhs.gctInternEm()->size() << " GCT intermediate EM candidates\n"
      << "Read " << rhs.gctInternJets()->size() << " GCT intermediate jet candidates\n"
      << "Read " << rhs.gctInternEtSums()->size() << " GCT intermediate et sums\n"
-     << "Read " << rhs.gctInternHFData()->size() << " GCT intermediate HF data\n"
 
      // GCT output collections
      << "Read " << rhs.gctIsoEm()->size() << " GCT iso EM candidates\n"
@@ -79,7 +80,7 @@ std::ostream& operator<<(std::ostream& os, const GctUnpackCollections& rhs)
      << "Read " << rhs.gctHfRingEtSums()->size() << " GCT HF ring et sums\n"
      << "Read " << rhs.gctEtTot()->size() << " GCT total et\n"
      << "Read " << rhs.gctEtHad()->size() << " GCT ht\n"
-     << "Read " << rhs.gctEtMiss()->size() << " GCT met\n"
+     << "Read " << rhs.gctEtMiss()->size() << " GCT met\n";
      
   return os;
 }

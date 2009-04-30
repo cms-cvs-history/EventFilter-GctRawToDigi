@@ -8,8 +8,8 @@
 * \brief Unpacks/packs the V38 raw format
 *
 * \author Robert Frazier
-* $Revision: 1.3.2.2 $
-* $Date: 2009/04/27 14:30:54 $
+* $Revision: 1.3.2.3 $
+* $Date: 2009/04/30 12:50:43 $
 */ 
 
 // ************************************************************************
@@ -139,9 +139,6 @@ private:
 
   /// unpack GCT internal shared jet finder info
   void blockToGctJetPreCluster(const unsigned char * d, const GctBlockHeader& hdr);
-
-  /// unpack GCT internal HF ring sums
-  void blockToGctInternRingSums(const unsigned char * d, const GctBlockHeader& hdr);
 };
 
 #endif

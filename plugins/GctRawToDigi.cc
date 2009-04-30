@@ -128,7 +128,7 @@ void GctRawToDigi::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   LogDebug("GCT") << "Upacking FEDRawData of size " << std::dec << gctRcd.size();
 
   // Instantiate all the collections the unpacker needs; puts them in event when this object goes out of scope.
-  std::auto_ptr<GctUnpackCollections> colls(new GctUnpackCollections(iEvent));
+  std::auto_ptr<GctUnpackCollections> colls(new GctUnpackCollections(iEvent, hltMode_));
   
   // do a simple check of the raw data - this will detect empty events
   if(gctRcd.size() < 16)

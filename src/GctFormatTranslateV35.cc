@@ -354,7 +354,7 @@ GctFormatTranslateV35::GctFormatTranslateV35(bool hltMode, bool unpackSharedRegi
     m_blockUnpackFn[0x000] = &GctFormatTranslateV35::blockDoNothing;                    // NULL
     // ConcJet FPGA                                                             
     m_blockUnpackFn[0x580] = &GctFormatTranslateV35::blockToGctTrigObjects;             // ConcJet: Input TrigPathA (Jet Cands)
-    m_blockUnpackFn[0x581] = &GctFormatTranslateV35::blockToGctInternRingSums;          // ConcJet: Input TrigPathB (HF Rings)
+    m_blockUnpackFn[0x581] = &GctFormatTranslateV35::blockDoNothing;                    // ConcJet: Input TrigPathB (HF Rings)
     m_blockUnpackFn[0x583] = &GctFormatTranslateV35::blockToGctJetCandsAndCounts;       // ConcJet: Jet Cands and Counts Output to GT
     m_blockUnpackFn[0x587] = &GctFormatTranslateV35::blockDoNothing;                    // ConcJet: BX & Orbit Info
     // ConcElec FPGA                                                            
@@ -971,29 +971,4 @@ void GctFormatTranslateV35::blockToGctJetPreCluster(const unsigned char * d, con
       ++p;
     }
   } 
-}
-
-void GctFormatTranslateV35::blockToGctInternRingSums(const unsigned char * d, const GctBlockHeader& hdr)
-{
-  // Don't want to do this in HLT optimisation mode!
-  if(hltMode()) { LogDebug("GCT") << "HLT mode - skipping unpack of internal HF ring data"; return; }
-
-  unsigned int id = hdr.blockId();
-  unsigned int nSamples = hdr.nSamples();
-  unsigned int length = hdr.blockLength();
-
-  // Re-interpret pointer to 32 bits 
-  uint32_t * p = reinterpret_cast<uint32_t *>(const_cast<unsigned char *>(d));
-
-  for (unsigned int i=0; i<length/2; ++i) {
-    // Loop over timesamples (i.e. bunch crossings)
-    for (unsigned int bx=0; bx<nSamples; ++bx) {
-      colls()->gctInternHFData()->push_back(L1GctInternHFData::fromConcRingSums(id,i,bx,*p));
-      ++p;
-    }
-    for (unsigned int bx=0; bx<nSamples; ++bx) {
-      colls()->gctInternHFData()->push_back(L1GctInternHFData::fromConcBitCounts(id,i,bx,*p));
-      ++p;
-    }  
-  }
 }
